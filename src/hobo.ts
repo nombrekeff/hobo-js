@@ -1,7 +1,7 @@
 // import * as fs from 'fs';
 import { Tag } from './tag';
 import { HtmlGenerator } from './generation/html-generator';
-import { AttachMode, HoboContext, State, StateProxy, ValidTagChild } from './types/types';
+import { AttachMode, HoboContext, ValidTagChild } from './types/types';
 import { builders, TagBuilder } from './tag-builder';
 import { TagName, ValidTagName } from './types/tag-names';
 

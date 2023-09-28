@@ -14,8 +14,8 @@ myPage.head.append(
     '.wrapper': {
       background: 'black',
       display: 'flex',
-      'alignItems': 'center',
-      'justifyContent': 'center',
+      alignItems: 'center',
+      justifyContent: 'center',
     },
   }),
 );
