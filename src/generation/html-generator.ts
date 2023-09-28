@@ -1,51 +1,14 @@
-// import pretty from 'pretty';
 import { Tag } from '../tag';
 import { CssGenerator } from './css-generator';
 import { HoboContext } from '../types/types';
-import { script } from '../tag';
-import { justFnBody } from '../util';
-import { HOBO_RT_PATH } from './consts';
 
 export class HtmlGenerator {
   private cssGenerator = new CssGenerator();
   public beautifyCss = true;
 
   generateHtml(rootTag: Tag, context?: HoboContext): string {
-    if (context) this._handleGlobals(context, rootTag);
-
     let generatedHtml = this._generateTag(rootTag);
-    return generatedHtml; //pretty(generatedHtml);
-  }
-
-  private _handleGlobals(context: HoboContext, rootTag: Tag) {
-    const body = rootTag.findByTagName('body');
-    const head = rootTag.findByTagName('head');
-    if (context.globalStuff.length > 0) {
-      let hoboRtSrc = '';
-
-      for (let g of context.globalStuff) {
-        console.log('g', g);
-        if (typeof g == 'string') hoboRtSrc += g;
-        else if (typeof g == 'function') hoboRtSrc += justFnBody(g);
-      }
-
-      const globalScript = script(hoboRtSrc).id('_hbGlobalScript');
-
-      if (body) {
-        body.children.push(globalScript);
-      } else {
-        rootTag.children.push(globalScript);
-      }
-    }
-
-    const hoboRtScript = script('').am({ src: HOBO_RT_PATH });
-    if (head) {
-      head.children.push(hoboRtScript);
-    } else if (body) {
-      body.children.unshift(hoboRtScript);
-    } else {
-      rootTag.children.unshift(hoboRtScript);
-    }
+    return generatedHtml;
   }
 
   private _generateTag(tag: Tag) {
@@ -54,7 +17,6 @@ export class HtmlGenerator {
     }
 
     if (tag.tagName == 'script') {
-      console.log('script', tag._meta.storage);
       return this._createTag(tag, tag._meta.storage);
     }
 

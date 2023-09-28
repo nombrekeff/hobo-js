@@ -1,1 +1,0 @@
-export const HOBO_RT_PATH = '../../src/rt/dist/hobo-rt.js';

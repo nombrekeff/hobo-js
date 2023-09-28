@@ -1,5 +1,5 @@
 import { ClassName } from './class-name';
-import { TagName, selfClosingTags } from './tag-names';
+import { TagName, selfClosingTags } from './types/tag-names';
 import { AttrSet } from './attributes';
 import { CssProperty } from './types/css-properties';
 import { PickPropertyValues } from './types/css-property-values';

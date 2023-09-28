@@ -1,7 +1,7 @@
 import { argv } from 'process';
 import * as fs from 'fs';
 import path from 'path';
-import { HtmlGenerator } from './src/generation/html-generator';
+import { HtmlGenerator } from '../src/generation/html-generator';
 
 const args = argv.slice(2);
 const hoboAppPath = args[0];

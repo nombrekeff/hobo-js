@@ -11,6 +11,6 @@
     "outFile": "dist/hobo.bundle.js",
     "types": ["node"]
   },
-  "exclude": ["./example","./src/rt", "hobo-build.ts", "dist/"],
+  "exclude": ["examples/", "bin/", "dist/"],
   "lib": ["es2015", "dom"]
 }

@@ -9,20 +9,12 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "nombrekeff",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^20.7.0",
-    "@types/pretty": "^2.0.1",
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "@types/cssbeautify": "^0.3.3",
-    "cssbeautify": "^0.3.1",
-    "flatted": "^3.2.9",
-    "hobo": "^0.0.0",
-    "normalize.css": "^8.0.1",
-    "pretty": "^2.0.0",
-    "requirejs": "^2.3.6"
   }
 }
