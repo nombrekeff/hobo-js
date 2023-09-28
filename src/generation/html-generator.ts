@@ -1,6 +1,7 @@
 import { Tag } from '../tag';
 import { CssGenerator } from './css-generator';
 import { HoboContext } from '../types/types';
+import { justFnBody } from '../util';
 
 export class HtmlGenerator {
   private cssGenerator = new CssGenerator();
@@ -17,7 +18,7 @@ export class HtmlGenerator {
     }
 
     if (tag.tagName == 'script') {
-      return this._createTag(tag, tag._meta.storage);
+      return this._createTag(tag, this._generateScriptContent(tag._meta.storage));
     }
 
     let inside = '';
@@ -71,6 +72,20 @@ export class HtmlGenerator {
     }
 
     return this._attr('style', styleContent);
+  }
+
+  private _generateScriptContent(storage: Function | Function[]): string {
+    let scriptContent = '';
+
+    if (storage instanceof Function) {
+      scriptContent += justFnBody(storage);
+    } else if (storage instanceof Array) {
+      for (const fn of storage) {
+        scriptContent += this._generateScriptContent(fn);
+      }
+    }
+
+    return scriptContent;
   }
 
   private _attr(name: string, value: string) {

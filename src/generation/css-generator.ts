@@ -1,5 +1,6 @@
 // import cssbeautify from 'cssbeautify';
 import { StyleMap } from '../types/types';
+import { camelToDash } from '../util';
 
 export class CssGenerator {
   beautify: boolean;
@@ -8,10 +9,14 @@ export class CssGenerator {
     this.beautify = beautify;
   }
 
-  generate(styleSheet: { [key: string]: StyleMap }) {
+  generate(styleSheet: { [key: string]: StyleMap } | { [key: string]: StyleMap }[]) {
+    let stylesheets = styleSheet instanceof Array ? styleSheet : [styleSheet];
     let generatedCss = '';
-    for (const key in styleSheet) {
-      generatedCss += this._generateBlock(key, styleSheet[key]);
+
+    for (const sheet of stylesheets) {
+      for (const key in sheet) {
+        generatedCss += this._generateBlock(key, sheet[key]);
+      }
     }
     return generatedCss;
   }
@@ -22,10 +27,10 @@ export class CssGenerator {
       if (style[key]) inside += this._generateStyle(key, style[key] as string);
     }
 
-    return `${selector} { ${inside} }`;
+    return `${camelToDash(selector)} { ${inside} }`;
   }
 
   private _generateStyle(name: string, value: string) {
-    return `${name}: ${value};`;
+    return `${camelToDash(name)}: ${value};`;
   }
 }

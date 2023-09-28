@@ -1,7 +1,3 @@
-export function replaceDoubleQuotes(str: string): string {
-  return str.replace(/"/g, "'");
-}
-
 /** Receives a function, and returns just the body of the function as a string */
 export function justFnBody(fn: Function) {
   let fnStr = fn.toString();
@@ -10,10 +6,8 @@ export function justFnBody(fn: Function) {
   fnStr = fnStr.replace(/^\(.*\)\s?=>\s?{/, '');
   return fnStr.trim();
 }
-
-function s4() {
-  return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
-}
-export function generateId() {
-  return `_hb${s4() + s4()}`;
-}
+export const replaceDoubleQuotes = (str: string)=>str.replace(/"/g, "'");
+export const generateId = () => `_hb${s4() + s4()}`;
+export const camelToDash = (str) => str.replace(/([A-Z])/g, (val) => `-${val.toLowerCase()}`);
+export const dashToCamel = (str) => str.replace(/(\-[a-z])/g, (val) => val.toUpperCase().replace('-', ''));
+const s4 = ()=>(((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);

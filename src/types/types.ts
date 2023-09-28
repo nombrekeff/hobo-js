@@ -10,11 +10,12 @@ export enum AttachMode {
   html,
   head,
 }
-export type ValidTagChild<T extends string = any> = string | Tag | StateProxy<T>;
+export type ValidTagChild = string | Tag | { [key: string]: StyleMap } | Function;
 
 export type TagMeta = {
   storage: any;
   selfClosing: boolean;
+  storesChildren: boolean;
 };
 
 export type FindBy = (tag: Tag) => boolean;
