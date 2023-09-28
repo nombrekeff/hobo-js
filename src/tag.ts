@@ -3,16 +3,16 @@ import { TagName, selfClosingTags } from './tag-names';
 import { AttrSet } from './attributes';
 import { CssProperty } from './types/css-properties';
 import { PickPropertyValues } from './types/css-property-values';
-import { FindBy, HoboRt, HtmlEventType, StyleMap, TagMeta, ValidTagChild } from './types/types';
+import { FindBy, HtmlEventType, StyleMap, TagMeta, ValidTagChild } from './types/types';
 import { justFnBody, replaceDoubleQuotes } from './util';
-const { rt: hobo_rt } = require('./rt/hobo-rt');
+
 /**
  * Can throw if the tag name is not valid.
  */
 export class Tag {
   tagName: TagName;
   children: ValidTagChild[] = [];
-  parent: Tag | undefined;
+  // parent: Tag | undefined;
 
   /**
    * Do not modify directly, use helper methods in the tag instead.
@@ -36,12 +36,11 @@ export class Tag {
     validateTagName(this.tagName);
     this.children.push(
       ...children.map((t) => {
-        if (t instanceof Tag) t.parent = this;
+        // if (t instanceof Tag) t.parent = this;
         return t;
       }),
     );
     this._meta = getMetaForTag(tagName);
-    console.log('new Tag ' + this.tagName, this.children.length, this._meta);
   }
 
   /**
@@ -118,6 +117,16 @@ export class Tag {
     } else {
       this.children.push(newTag);
     }
+    return this;
+  }
+
+  append(...tags: ValidTagChild[]) {
+    this.children.push(...tags);
+    return this;
+  }
+
+  setChildren(children: ValidTagChild[]) {
+    this.children = children;
     return this;
   }
 

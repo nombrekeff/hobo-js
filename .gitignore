@@ -1,3 +1,6 @@
 /_*
 /_*/
 /node_modules/
+/src/*.html
+/src/*.js
+/src/*.js.map

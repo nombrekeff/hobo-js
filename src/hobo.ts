@@ -1,4 +1,4 @@
-import * as fs from 'fs';
+// import * as fs from 'fs';
 import {
   Tag,
   body as hbody,
@@ -27,6 +27,7 @@ import {
 import { HtmlGenerator } from './generation/html-generator';
 import { AttachMode, HoboContext, State, StateProxy } from './types/types';
 import { createState } from './state';
+export { byClass, byTag, byId } from './tag';
 
 let _context: HoboContext = {
   attachedTag: null,
@@ -177,6 +178,48 @@ export function generate(root: Tag) {
   return _generator.generateHtml(root, _context);
 }
 
-export function save(str: string, path: string) {
-  fs.writeFileSync(path, str);
+function diff(obj1: any, obj2: any) {
+  const result = {};
+  if (Object.is(obj1, obj2)) {
+    return undefined;
+  }
+  if (!obj2 || typeof obj2 !== 'object') {
+    return obj2;
+  }
+  Object.keys(obj1 || {})
+    .concat(Object.keys(obj2 || {}))
+    .forEach((key) => {
+      if (obj2[key] !== obj1[key] && !Object.is(obj1[key], obj2[key])) {
+        result[key] = obj2[key];
+      }
+      if (typeof obj2[key] === 'object' && typeof obj1[key] === 'object') {
+        const value = diff(obj1[key], obj2[key]);
+        if (value !== undefined) {
+          result[key] = value;
+        }
+      }
+    });
+  return result;
+}
+
+const renderContext: { [selector: string]: any } = {};
+
+export function render(tag: Tag, selector: string): void {
+  const parent = document.querySelector(selector) as HTMLElement;
+  // if (renderContext[selector]) {
+  //   // Previously rendered!
+  //   const tagDiff = diff(tag, { ...renderContext[selector] });
+  //   console.log(tag, renderContext[selector]);
+  //   console.log(tagDiff);
+  // }
+
+  const generated = _generator.generateHtml(tag, _context);
+
+  if (!parent) {
+    throw new Error("Can't find item with selector " + selector);
+  }
+
+  parent.innerHTML = generated;
+  renderContext[selector] = structuredClone(tag);
+  console.log(renderContext[selector])
 }

@@ -1,4 +1,4 @@
-import pretty from 'pretty';
+// import pretty from 'pretty';
 import { Tag } from '../tag';
 import { CssGenerator } from './css-generator';
 import { HoboContext } from '../types/types';
@@ -14,7 +14,7 @@ export class HtmlGenerator {
     if (context) this._handleGlobals(context, rootTag);
 
     let generatedHtml = this._generateTag(rootTag);
-    return pretty(generatedHtml);
+    return generatedHtml; //pretty(generatedHtml);
   }
 
   private _handleGlobals(context: HoboContext, rootTag: Tag) {

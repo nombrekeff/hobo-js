@@ -28,11 +28,4 @@ export type HoboContext = {
   globalStuff: GlobalStuff[];
 };
 
-export type HoboRt = {
-  createState(state: State): StateProxy<{}>;
-  q(selector: string): HoboTag;
-  fromStr(tag: string): HoboTag;
-  // fromTemplate(id: string): HoboTag;
-};
-
 export type HtmlEventType = 'click' | (string & {});

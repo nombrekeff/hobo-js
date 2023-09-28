@@ -1,4 +1,4 @@
-import cssbeautify from 'cssbeautify';
+// import cssbeautify from 'cssbeautify';
 import { StyleMap } from '../types/types';
 
 export class CssGenerator {
@@ -13,7 +13,7 @@ export class CssGenerator {
     for (const key in styleSheet) {
       generatedCss += this._generateBlock(key, styleSheet[key]);
     }
-    return this.beautify ? cssbeautify(generatedCss) : generatedCss;
+    return generatedCss;
   }
 
   private _generateBlock(selector: string, style: StyleMap) {

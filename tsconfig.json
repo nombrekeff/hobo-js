@@ -1,14 +1,16 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "amd",
     "esModuleInterop": true,
-    "target": "es6",
+    "target": "ES2015",
     "moduleResolution": "node",
+    "declaration": true,
     "sourceMap": true,
     "noImplicitAny": false,
     "lib": ["es2015", "dom"],
-    "outDir": "dist",
+    "outFile": "dist/hobo.bundle.js",
     "types": ["node"]
   },
+  "exclude": ["./example","./src/rt", "hobo-build.ts", "dist/"],
   "lib": ["es2015", "dom"]
 }
