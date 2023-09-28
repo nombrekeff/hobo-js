@@ -71,6 +71,9 @@ export class Tag {
   i(...children: ValidTagChild[]) {
     return this.tag('i', ...children);
   }
+  a(...children: ValidTagChild[]): Tag {
+    return this.tag('a', ...children);
+  }
   h1(...children: ValidTagChild[]) {
     return this.tag('h1', ...children);
   }
@@ -95,10 +98,17 @@ export class Tag {
   img(...children: ValidTagChild[]) {
     return this.tag('img', ...children);
   }
+  button(...children: ValidTagChild[]) {
+    return this.tag('button', ...children);
+  }
+  input(...children: ValidTagChild[]) {
+    return this.tag('input', ...children);
+  }
 
   style(styles: { [key: string]: StyleMap }) {
-    const newTag = this.tag('style');
+    const newTag = tag('style');
     newTag._meta.storage = styles;
+    this.append(newTag);
     return this;
   }
 
@@ -110,17 +120,15 @@ export class Tag {
 
   tag(tagName: TagName, ...children: ValidTagChild[]): Tag {
     const newTag = tag(tagName, ...children);
-    console.log(this.tagName + ' > ' + tagName, this._meta);
-    if (this._meta.selfClosing) {
-      console.log('A child was attempted to be added to a self closing tag. This is not allowed!');
-      console.log('Child tag will not be added');
-    } else {
-      this.children.push(newTag);
-    }
+    this.append(newTag);
     return this;
   }
 
   append(...tags: ValidTagChild[]) {
+    if (this._meta.selfClosing) {
+      return;
+    }
+
     this.children.push(...tags);
     return this;
   }
@@ -277,6 +285,9 @@ export function b(...children: ValidTagChild[]) {
 }
 export function i(...children: ValidTagChild[]) {
   return tag('i', ...children);
+}
+export function a(...children: ValidTagChild[]) {
+  return tag('a', ...children);
 }
 export function bold(...children: ValidTagChild[]) {
   return tag('bold', ...children);

@@ -2,8 +2,7 @@
   "name": "hobo",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
-  "type": "module",
+  "main": "src/hobo.ts",
   "types": "./dist/hobo.bundle.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
