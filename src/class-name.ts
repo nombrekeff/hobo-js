@@ -6,7 +6,7 @@ export class ClassName {
   }
 
   raw(): string {
-    return '.' + this.classNames.join('.');
+    return this.classNames.join(' ');
   }
 
   add(...classNames: string[]): ClassName {

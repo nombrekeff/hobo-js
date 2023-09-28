@@ -1,27 +1,44 @@
-import { AttachMode, HoboContext, ValidTagChild } from './types';
-import { Tag, body, head, tag as htag, html } from './tag';
-import { TagName } from './tag-names';
-export * from './tag';
+import * as fs from 'fs';
+import {
+  Tag,
+  body as hbody,
+  head as hhead,
+  div as hdiv,
+  span as hspan,
+  p as hp,
+  img as himg,
+  section as hsection,
+  hr as hhr,
+  tag as htag,
+  style as hstyle,
+  script as hscript,
+  title as htitle,
+  meta as hmeta,
+  input as hinput,
+  button as hbutton,
+  h1 as hh1,
+  h2 as hh2,
+  h3 as hh3,
+  h4 as hh4,
+  h5 as hh5,
+  h6 as hh6,
+  html,
+} from './tag';
+import { HtmlGenerator } from './generation/html-generator';
+import { AttachMode, HoboContext, State, StateProxy } from './types/types';
+import { createState } from './state';
 
 let _context: HoboContext = {
   attachedTag: null,
   attachedTagStack: [],
+  globalStuff: [],
 };
 
-/** Creates a Tag of name `tagName` with some optional children */
-export function tag(tagName: TagName, children: ValidTagChild[] = []) {
-  const newTag = htag(tagName, children);
-
-  if (_context.attachedTag) {
-    _context.attachedTag.children.push(newTag);
-  }
-
-  return newTag;
-}
-
 /** Creates a HTML document, with a head and body tags */
-export function doc(mode: AttachMode = AttachMode.body): Tag {
-  const doc = html([head(), body()]);
+export function doc(pageTitle: string = 'New Hobo Document', mode: AttachMode = AttachMode.body) {
+  const dhead = head(title(pageTitle));
+  const dbody = body();
+  const doc = html(dhead, dbody);
 
   switch (mode) {
     case AttachMode.html:
@@ -38,7 +55,7 @@ export function doc(mode: AttachMode = AttachMode.body): Tag {
       break;
   }
 
-  return doc;
+  return { doc, head: dhead, body: dbody };
 }
 
 /**
@@ -48,7 +65,7 @@ export function doc(mode: AttachMode = AttachMode.body): Tag {
  * * If there is not attached tag, it will be attached
  * * If there is already a tag attached, it will store the previous tag
  *   and will set the new tag as the root. After finishing using the tag as the root, you can call `@detach`
- *   and return to the previous root node.
+ *   and return to the previous root tag.
  *
  * This is used to remove clutter and reduntancies when creating hobo docs.
  * Like this:
@@ -78,7 +95,7 @@ export function doc(mode: AttachMode = AttachMode.body): Tag {
  * p();
  * p();
  * p();
- * // remember to call detach when you want to go back to the previous root node
+ * // remember to call detach when you want to go back to the previous root tag
  * detach();
  * ```
  */
@@ -100,4 +117,66 @@ export function detach() {
   } else {
     _context.attachedTag = null;
   }
+}
+
+// State
+export function state<T extends State>(state: T, name?: string): StateProxy<T> {
+  const newState = createState(state, name);
+  _context.globalStuff.push(`hobo.rt.createState(${{ ...state }})`);
+  return newState;
+}
+
+function attachable<T extends (...any: any) => Tag>(
+  fn: T,
+): T & {
+  /** `.a` attaches to the currently attached node tag */
+  a: T;
+} {
+  const attach = ((...args: any[]) => {
+    const tag = fn(...args);
+    if (_context.attachedTag) {
+      _context.attachedTag.children.push(tag);
+    } else {
+      throw new Error('There is no attached tag.');
+    }
+    return tag;
+  }) as any;
+
+  const regular: any = (...args: any[]) => fn(...args);
+  regular.a = attach;
+  return regular;
+}
+
+// Make all attachable tags attachable
+export const tag = attachable(htag);
+export const body = attachable(hbody);
+export const head = attachable(hhead);
+export const div = attachable(hdiv);
+export const section = attachable(hsection);
+export const p = attachable(hp);
+export const span = attachable(hspan);
+export const button = attachable(hbutton);
+export const input = attachable(hinput);
+export const hr = attachable(hhr);
+export const h1 = attachable(hh1);
+export const h2 = attachable(hh2);
+export const h3 = attachable(hh3);
+export const h4 = attachable(hh4);
+export const h5 = attachable(hh5);
+export const h6 = attachable(hh6);
+export const title = attachable(htitle);
+export const img = attachable(himg);
+export const script = attachable(hscript);
+export const style = attachable(hstyle);
+export const meta = attachable(hmeta);
+
+// Generation
+
+const _generator = new HtmlGenerator();
+export function generate(root: Tag) {
+  return _generator.generateHtml(root, _context);
+}
+
+export function save(str: string, path: string) {
+  fs.writeFileSync(path, str);
 }

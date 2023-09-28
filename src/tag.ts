@@ -1,24 +1,27 @@
 import { ClassName } from './class-name';
-import { AttrSet, FindBy, TagMeta, ValidTagChild } from './types';
-import { Style } from './style';
 import { TagName, selfClosingTags } from './tag-names';
-
+import { AttrSet } from './attributes';
+import { CssProperty } from './types/css-properties';
+import { PickPropertyValues } from './types/css-property-values';
+import { FindBy, HoboRt, HtmlEventType, StyleMap, TagMeta, ValidTagChild } from './types/types';
+import { justFnBody, replaceDoubleQuotes } from './util';
+const { rt: hobo_rt } = require('./rt/hobo-rt');
+/**
+ * Can throw if the tag name is not valid.
+ */
 export class Tag {
   tagName: TagName;
   children: ValidTagChild[] = [];
+  parent: Tag | undefined;
+
   /**
-   * Do not modify directly, use helper methods and functions instead.
-   *
-   * For example instead of changin the className here, use either `this.className` or `.m` method
+   * Do not modify directly, use helper methods in the tag instead.
    */
-  attr: AttrSet = {
-    className: new ClassName(),
-    id: undefined,
-    style: new Style(),
-  };
+  attr: AttrSet = new AttrSet();
 
   _meta: TagMeta = {
     selfClosing: false,
+    storage: false,
   };
 
   get className() {
@@ -29,8 +32,16 @@ export class Tag {
   }
 
   constructor(tagName: TagName, children: ValidTagChild[] = []) {
-    this.tagName = tagName;
-    this.children.push(...children);
+    this.tagName = sanitizeTagName(tagName);
+    validateTagName(this.tagName);
+    this.children.push(
+      ...children.map((t) => {
+        if (t instanceof Tag) t.parent = this;
+        return t;
+      }),
+    );
+    this._meta = getMetaForTag(tagName);
+    console.log('new Tag ' + this.tagName, this.children.length, this._meta);
   }
 
   /**
@@ -42,29 +53,76 @@ export class Tag {
     return this;
   }
 
-  div(children: ValidTagChild[] = []): Tag {
-    return tag('div', children) as Tag;
+  /** replaces the children of this tag, and replaces with the provided string */
+  inside(content: string) {
+    this.children = [content];
+    return this;
   }
 
-  p(children: ValidTagChild[] = []): Tag {
-    return tag('p', children) as Tag;
+  div(...children: ValidTagChild[]): Tag {
+    return this.tag('div', ...children);
   }
 
-  span(children: ValidTagChild[] = []): Tag {
-    return tag('span', children) as Tag;
+  p(...children: ValidTagChild[]): Tag {
+    return this.tag('p', ...children);
+  }
+  b(...children: ValidTagChild[]) {
+    return this.tag('b', ...children);
+  }
+  i(...children: ValidTagChild[]) {
+    return this.tag('i', ...children);
+  }
+  h1(...children: ValidTagChild[]) {
+    return this.tag('h1', ...children);
+  }
+  h2(...children: ValidTagChild[]) {
+    return this.tag('h2', ...children);
+  }
+  h3(...children: ValidTagChild[]) {
+    return this.tag('h3', ...children);
+  }
+  h4(...children: ValidTagChild[]) {
+    return this.tag('h4', ...children);
+  }
+  h5(...children: ValidTagChild[]) {
+    return this.tag('h5', ...children);
+  }
+  h6(...children: ValidTagChild[]) {
+    return this.tag('h6', ...children);
+  }
+  span(...children: ValidTagChild[]): Tag {
+    return this.tag('span', ...children);
+  }
+  img(...children: ValidTagChild[]) {
+    return this.tag('img', ...children);
   }
 
-  img(children: ValidTagChild[] = []) {
-    return tag('img', children);
+  style(styles: { [key: string]: StyleMap }) {
+    const newTag = this.tag('style');
+    newTag._meta.storage = styles;
+    return this;
   }
 
-  tag(tagName: TagName, children: ValidTagChild[] = []): Tag {
-    const newTag = tag(tagName, children);
-    this.children.push(newTag as any);
-    return newTag;
+  script(fn: () => {}) {
+    const newTag = tag('script');
+    newTag._meta.storage = fn.toString();
+    return this;
+  }
+
+  tag(tagName: TagName, ...children: ValidTagChild[]): Tag {
+    const newTag = tag(tagName, ...children);
+    console.log(this.tagName + ' > ' + tagName, this._meta);
+    if (this._meta.selfClosing) {
+      console.log('A child was attempted to be added to a self closing tag. This is not allowed!');
+      console.log('Child tag will not be added');
+    } else {
+      this.children.push(newTag);
+    }
+    return this;
   }
 
   /**
+   * cm = modify
    * calls `fn` with the tag, and returns the tag
    *
    * usefull to change a tag while maintaing chaning
@@ -88,6 +146,7 @@ export class Tag {
   }
 
   /**
+   * cm = classname modify
    * If the argument is a function
    *
    * Shortcut for modifying the classnames of a tag. Similar to the `.m` method
@@ -106,10 +165,46 @@ export class Tag {
   }
 
   /**
-   *  Adds classNames to this Tag, and retuns this Tag
+   * ca = classname add
+   * Adds classNames to this Tag, and retuns this Tag
    */
   ca(...classNames: string[]) {
     this.className.add(...classNames);
+    return this;
+  }
+
+  /** Add attribute */
+  aa(key: string, value: string) {
+    this.attr.set(key, value);
+    return this;
+  }
+
+  /** Add multiple atributes at once */
+  am(attributes: { [key: string]: string }) {
+    this.attr.additionalAttributes = {
+      ...this.attr.additionalAttributes,
+      ...attributes,
+    };
+    return this;
+  }
+
+  /** Add style */
+  sa<T extends CssProperty>(key: T, value: PickPropertyValues<T>) {
+    this.attr.style.set(key, value);
+    return this;
+  }
+
+  /** Set style as object*/
+  ss(styles: StyleMap) {
+    this.attr.style.styles = {
+      ...this.attr.style.styles,
+      ...styles,
+    };
+    return this;
+  }
+
+  on(event: HtmlEventType, fn: () => void) {
+    this.attr.set(`on${event}`, replaceDoubleQuotes(justFnBody(fn)));
     return this;
   }
 
@@ -117,63 +212,109 @@ export class Tag {
     return this.findOneBy(byTag(targetTagName));
   }
 
-  findOneBy(test: FindBy) {
+  findOneBy(test: FindBy): Tag | null {
     const stack: Tag[] = [];
     stack.push(this);
 
     while (stack.length > 0) {
-      let node: Tag = stack.pop() as Tag;
-      if (test(node)) {
-        return node;
-      } else if (node.children && node.children.length) {
-        for (let ii = 0; ii < node.children.length; ii += 1) {
+      let tag: Tag = stack.pop() as Tag;
+
+      if (test(tag)) {
+        return tag;
+      } else if (tag.children && tag.children.length) {
+        for (let ii = 0; ii < tag.children.length; ii += 1) {
           if (this.children[ii] instanceof Tag) {
-            stack.push(node.children[ii] as Tag);
+            stack.push(tag.children[ii] as Tag);
           }
         }
       }
     }
 
-    // Didn't find it. Return null.
     return null;
   }
 }
 
 // Tag functions
-export function tag(tagName: TagName, children: ValidTagChild[] = []): Tag {
-  let newTag = new Tag(tagName, children);
-  newTag._meta = getMetaForTag(tagName);
+export function tag(tagName: TagName, ...children: ValidTagChild[]): Tag {
+  return new Tag(tagName, children);
+}
 
+export function html(...children: ValidTagChild[]) {
+  return tag('html', ...children);
+}
+export function head(...children: ValidTagChild[]) {
+  return tag('head', ...children);
+}
+export function body(...children: ValidTagChild[]) {
+  return tag('body', ...children);
+}
+export function div(...children: ValidTagChild[]) {
+  return tag('div', ...children);
+}
+export function section(...children: ValidTagChild[]) {
+  return tag('section', ...children);
+}
+export function button(...children: ValidTagChild[]) {
+  return tag('button', ...children);
+}
+export function input(...children: ValidTagChild[]) {
+  return tag('input', ...children);
+}
+export function p(...children: ValidTagChild[]) {
+  return tag('p', ...children);
+}
+export function b(...children: ValidTagChild[]) {
+  return tag('b', ...children);
+}
+export function i(...children: ValidTagChild[]) {
+  return tag('i', ...children);
+}
+export function bold(...children: ValidTagChild[]) {
+  return tag('bold', ...children);
+}
+export function h1(...children: ValidTagChild[]) {
+  return tag('h1', ...children);
+}
+export function h2(...children: ValidTagChild[]) {
+  return tag('h2', ...children);
+}
+export function h3(...children: ValidTagChild[]) {
+  return tag('h3', ...children);
+}
+export function h4(...children: ValidTagChild[]) {
+  return tag('h4', ...children);
+}
+export function h5(...children: ValidTagChild[]) {
+  return tag('h5', ...children);
+}
+export function h6(...children: ValidTagChild[]) {
+  return tag('h6', ...children);
+}
+export function span(...children: ValidTagChild[]) {
+  return tag('span', ...children);
+}
+export function img(...children: ValidTagChild[]) {
+  return tag('img', ...children);
+}
+export function hr(...children: ValidTagChild[]) {
+  return tag('hr', ...children);
+}
+export function title(...children: ValidTagChild[]) {
+  return tag('title', ...children);
+}
+export function meta(...children: ValidTagChild[]) {
+  return tag('meta', ...children);
+}
+export function style(styles: { [key: string]: StyleMap }) {
+  const newTag = tag('style');
+  newTag._meta.storage = styles;
   return newTag;
 }
-
-export function html(children: ValidTagChild[] = []) {
-  return tag('html', children) as Tag;
-}
-export function head(children: ValidTagChild[] = []) {
-  return tag('head', children) as Tag;
-}
-export function body(children: ValidTagChild[] = []) {
-  return tag('body', children) as Tag;
-}
-
-export function div(children: ValidTagChild[] = []) {
-  return tag('div', children) as Tag;
-}
-export function section(children: ValidTagChild[] = []) {
-  return tag('section', children) as Tag;
-}
-export function p(children: ValidTagChild[] = []) {
-  return tag('p', children) as Tag;
-}
-export function span(children: ValidTagChild[] = []) {
-  return tag('span', children) as Tag;
-}
-export function img(children: ValidTagChild[] = []) {
-  return tag('img', children);
-}
-export function hr(children: ValidTagChild[] = []) {
-  return tag('hr', children);
+export function script(arg0: (() => void) | string) {
+  const newTag = tag('script');
+  if (typeof arg0 === 'function') newTag._meta.storage = justFnBody(arg0);
+  else newTag._meta.storage = arg0;
+  return newTag;
 }
 
 // FindBy functions
@@ -191,33 +332,18 @@ export function byId(id: string): FindBy {
 function getMetaForTag(tagName: TagName): TagMeta {
   return {
     selfClosing: isSelfClosingTag(tagName),
+    storage: null,
   };
 }
 function isSelfClosingTag(tagName: string) {
   return selfClosingTags.includes(tagName);
 }
 
-// type SelfClosingTag =
-//   | 'area'
-//   | 'base'
-//   | 'br'
-//   | 'col'
-//   | 'embed'
-//   | 'hr'
-//   | 'img'
-//   | 'input'
-//   | 'link'
-//   | 'meta'
-//   | 'param'
-//   | 'source'
-//   | 'track'
-//   | 'wbr';
-// type VoidTag = {};
-// type Tag = {};
-
-// function text<T extends string>(tag: T): T extends SelfClosingTag ? VoidTag : Tag {
-//   return "" as Tag;
-// };
-
-// text('area'); // return type should be VoidTag
-// text('div'); // return type should be Tag
+function validateTagName(tagName: TagName) {
+  if (!/[a-zA-Z_][a-z-A-Z0-9_]*/.test(tagName)) {
+    throw new Error(`Invalid tag name "${tagName}"`);
+  }
+}
+function sanitizeTagName(tagName: TagName) {
+  return tagName.replace(/[^\w\d]/, '');
+}
