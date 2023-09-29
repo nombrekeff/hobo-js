@@ -3,6 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AttrSet = void 0;
 const class_name_1 = require("./class-name");
 const style_1 = require("./style");
+/**
+ * Represents a tag's attribute set.
+ */
 class AttrSet {
     constructor() {
         this.className = new class_name_1.ClassName();

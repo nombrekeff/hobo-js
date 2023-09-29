@@ -77,6 +77,8 @@ export function doc(pageTitle: string = 'New Hobo Document', mode: AttachMode = 
  * // remember to call detach when you want to go back to the previous root tag
  * detach();
  * ```
+ * 
+ * @param {Tag} tag
  */
 export function attach(tag: Tag) {
   if (_context.attachedTag) {

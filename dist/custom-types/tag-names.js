@@ -1,6 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.storableTags = exports.allKnownTags = exports.closingTags = exports.selfClosingTags = void 0;
+/**
+ * @export
+ * List of all known self-closing HTML tags
+ */
 exports.selfClosingTags = [
     'area',
     'base',
@@ -17,6 +21,7 @@ exports.selfClosingTags = [
     'track',
     'wbr',
 ];
+/** List of all known closing HTML tags */
 exports.closingTags = [
     'a',
     'abbr',
@@ -119,6 +124,7 @@ exports.closingTags = [
     'var',
     'video',
 ];
+/** List of all known HTML tags */
 exports.allKnownTags = [
     'area',
     'base',

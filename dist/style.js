@@ -1,6 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.StyleSet = void 0;
+/**
+ * Represents a set of styles
+ */
 class StyleSet {
     constructor() {
         this.styles = {};

@@ -1,3 +1,7 @@
+/**
+ * @export
+ * List of all known self-closing HTML tags
+ */
 export const selfClosingTags = [
   'area',
   'base',
@@ -15,6 +19,7 @@ export const selfClosingTags = [
   'wbr',
 ];
 
+/** List of all known closing HTML tags */
 export const closingTags = [
   'a',
   'abbr',
@@ -118,6 +123,7 @@ export const closingTags = [
   'video',
 ];
 
+/** List of all known HTML tags */
 export const allKnownTags = [
   'area',
   'base',
@@ -238,7 +244,9 @@ export const allKnownTags = [
 
 export const storableTags = ['style', 'script'];
 
-export type TagName = ValidTagName | (string & {})
+/** @export @type {TagName} */
+export type TagName = ValidTagName | (string & {});
+/** @type {ValidTagName} */
 export type ValidTagName =
   | 'a'
   | 'abbr'

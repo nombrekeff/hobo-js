@@ -1,5 +1,8 @@
 import { ClassName } from './class-name';
 import { StyleSet } from './style';
+/**
+ * Represents a tag's attribute set.
+ */
 export declare class AttrSet {
     className: ClassName;
     id?: string;

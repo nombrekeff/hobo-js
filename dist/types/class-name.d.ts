@@ -1,3 +1,6 @@
+/**
+ * Represents a tag's class list.
+ */
 export declare class ClassName {
     classNames: string[];
     constructor(classNames?: string[]);

@@ -1,3 +1,6 @@
+/**
+ * Represents a tag's class list.
+ */
 export class ClassName {
   classNames: string[] = [];
 

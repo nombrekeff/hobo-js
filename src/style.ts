@@ -1,6 +1,9 @@
 import { CssProperty } from './custom-types/css-properties';
 import { PickPropertyValues } from './custom-types/css-property-values';
 
+/**
+ * Represents a set of styles 
+ */
 export class StyleSet {
   styles: { [key in CssProperty]?: PickPropertyValues<key> } = {};
 

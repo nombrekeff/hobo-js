@@ -7,8 +7,8 @@
   "type": "commonjs",
   "scripts": {
     "test": "jest --coverage",
-    "build": "tsc -p . -d & npm run build:docs",
-    "build:docs": "jsdoc2md -f \"./dist/**/*.js\" > docs/api.md"
+    "build": "tsc --doc -p . -d & npm run build:docs",
+    "build:docs": "typedoc --out docs src/**/*.ts"
   },
   "keywords": [
     "js",
@@ -32,5 +32,8 @@
     "ts-jest": "^29.1.1",
     "tsdoc-markdown": "^0.1.0",
     "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "typedoc": "^0.25.1"
   }
 }

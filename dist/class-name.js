@@ -1,6 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ClassName = void 0;
+/**
+ * Represents a tag's class list.
+ */
 class ClassName {
     constructor(classNames = []) {
         this.classNames = [];
