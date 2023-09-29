@@ -24,7 +24,7 @@ I recomend destructuring builders, for a cleaner code:
 const { div, p, span, b, script, button, style, a, hr } = builders;
 ```
 
-### Examples
+### Examples
 
 Check out the [`examples`](/examples) folder for a variety of examples on how to use hobo.
 
