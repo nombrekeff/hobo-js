@@ -1,6 +1,9 @@
 import { TagName } from './custom-types/tag-names';
 import { AttrSet } from './attributes';
 import { FindBy, TagMeta, ValidTagChild } from './custom-types/types';
+/**
+ * Represents an html tag
+ */
 export declare class Tag {
     tagName: TagName;
     children: ValidTagChild[];

@@ -3,6 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Tag = void 0;
 const attributes_1 = require("./attributes");
 const tag_builder_1 = require("./tag-builder");
+/**
+ * Represents an html tag
+ */
 class Tag {
     get className() {
         return this.attr.className;

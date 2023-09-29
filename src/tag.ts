@@ -3,11 +3,12 @@ import { AttrSet } from './attributes';
 import { FindBy, TagMeta, ValidTagChild } from './custom-types/types';
 import { TagBuilder } from './tag-builder';
 
+/**
+ * Represents an html tag
+ */
 export class Tag {
   tagName: TagName;
-
   children: ValidTagChild[] = [];
-
   attr: AttrSet = new AttrSet();
 
   _meta: TagMeta = {
