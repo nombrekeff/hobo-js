@@ -1,5 +1,7 @@
 ## Hobo.js
 ![](./hobo-header.png)
+
+
 Welcome to Hobo. A little utility to generate html inside your js/ts code. Meant as a side-project, but after writing it I thought it might be useful to some people in some scenarios.
 
 
