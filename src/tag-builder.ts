@@ -69,12 +69,12 @@ export class TagBuilder extends ExFunc {
   /**
    * Build the tag with additional children
    */
-  b(...children: ValidTagChild[]) {
+  b(...children: ValidTagChild[]): Tag {
     return this.__call__(...children);
   }
 
-  __call__(...children: ValidTagChild[]) {
-    let tagChildren = [...children, ...this.children];
+  __call__(...children: ValidTagChild[]): Tag {
+    let tagChildren = [...this.children, ...children];
 
     if (this._meta.storesChildren) {
       this._meta.storage = children;
@@ -121,10 +121,11 @@ export class TagBuilder extends ExFunc {
    */
   append(...tags: ValidTagChild[]) {
     if (this._meta.selfClosing) {
-      return;
+      return this;
     }
 
-    this.children.push(...tags);
+    this.children.push(...tags.map((c) => (c instanceof TagBuilder ? c.b() : c)));
+
     return this;
   }
 
@@ -254,8 +255,8 @@ const tagNames = allKnownTags;
 type BuilderFunctions = {
   [key in ValidTagName]: ((...children: ValidTagChild[]) => Tag) & TagBuilder;
 } & {
-  /** 
-   * Create a new TagBuilder with specified tagName 
+  /**
+   * Create a new TagBuilder with specified tagName
    * @example
    * ```ts
    * tag('uknown-tag');

@@ -11,7 +11,7 @@ let _context: HoboContext = {
   globalStuff: [],
 };
 
-/** 
+/**
  * Creates an HTML document, with a head and body tags.
  * You can pass in the AttachMode to attach to different tags.
  */
@@ -128,7 +128,7 @@ const _generator = new HtmlGenerator();
 
 /** Converts's the Tag tree into a html string */
 export function generate(root: Tag) {
-  return _generator.generateHtml(root, _context);
+  return _generator.generateHtml(root);
 }
 
 /**

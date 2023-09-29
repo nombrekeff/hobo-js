@@ -1,6 +1,7 @@
 import { TagName } from './custom-types/tag-names';
 import { AttrSet } from './attributes';
 import { FindBy, TagMeta, ValidTagChild } from './custom-types/types';
+import { TagBuilder } from './tag-builder';
 
 export class Tag {
   tagName: TagName;
@@ -31,6 +32,7 @@ export class Tag {
 
   /** Append children  */
   append(child: ValidTagChild) {
+    if(child instanceof TagBuilder) child = child.b();
     this.children.push(child);
   }
 

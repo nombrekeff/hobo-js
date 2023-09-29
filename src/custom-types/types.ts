@@ -1,4 +1,5 @@
 import { Tag } from '../tag';
+import { TagBuilder } from '../tag-builder';
 import { CssProperty } from './css-properties';
 import { PickPropertyValues } from './css-property-values';
 
@@ -10,7 +11,7 @@ export enum AttachMode {
   html,
   head,
 }
-export type ValidTagChild = string | Tag | { [key: string]: StyleMap } | Function;
+export type ValidTagChild = string | Tag | { [key: string]: StyleMap } | TagBuilder | ((_: string) => void);
 
 export type TagMeta = {
   storage: any;

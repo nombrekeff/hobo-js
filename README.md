@@ -24,8 +24,14 @@ I recomend destructuring builders, for a cleaner code:
 const { div, p, span, b, script, button, style, a, hr } = builders;
 ```
 
+### Examples
+
+Check out the [`examples`](/examples) folder for a variety of examples on how to use hobo.
+
 ### Demo
+
 Let me show you a little sample (_I explain everything in detail below_)
+
 ```ts
 const myPage = doc('My Page Title');
 
