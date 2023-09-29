@@ -4,8 +4,7 @@ import { Tag } from './tag';
 import { CssProperty } from './custom-types/css-properties';
 import { PickPropertyValues } from './custom-types/css-property-values';
 import { TagName, ValidTagName, allKnownTags, selfClosingTags, storableTags } from './custom-types/tag-names';
-import { HtmlEventType, StyleMap, TagMeta, ValidTagChild } from './custom-types/types';
-import { replaceDoubleQuotes, justFnBody } from './util';
+import { StyleMap, TagMeta, ValidTagChild } from './custom-types/types';
 
 class ExFunc extends Function {
   private __self__: any;
@@ -17,6 +16,7 @@ class ExFunc extends Function {
     return self;
   }
 
+  /* istanbul ignore next */
   __call__(...children: ValidTagChild[]) {}
 }
 
@@ -98,6 +98,7 @@ export class TagBuilder extends ExFunc {
   }
 
   /** Attach to the currently attached tag in the global hobo context */
+  /* istanbul ignore next */
   get a() {
     return this.copy();
   }
@@ -187,6 +188,8 @@ export class TagBuilder extends ExFunc {
    * Shortcut for modifying the classnames of a tag. Similar to the `.m` method
    * but it passes the className instead of the complete tag.
    *
+   * Retuns a new TagBuilder
+   *
    * @example
    * ```ts
    * div(
@@ -202,7 +205,7 @@ export class TagBuilder extends ExFunc {
 
   /**
    * ac = add classname
-   * Adds classNames to this Tag, and retuns this Tag
+   * Adds classNames to this TagBuilder, and returns a new TagBuilder
    */
   ac(...classNames: string[]) {
     const copy = this.copy();
@@ -210,14 +213,24 @@ export class TagBuilder extends ExFunc {
     return copy;
   }
 
-  /** Add attribute */
+  /**
+   * rc = remove classname
+   * Removes classNames from this TagBuilder, and returns a new TagBuilder
+   */
+  rc(...classNames: string[]) {
+    const copy = this.copy();
+    copy.className.remove(...classNames);
+    return copy;
+  }
+
+  /** Adds attribute, and returns a new TagBuilder */
   aa(key: string, value: string) {
     const copy = this.copy();
     copy.attr.set(key, value);
     return copy;
   }
 
-  /** Add multiple atributes at once */
+  /** Adds multiple atributes at once, and returns a new TagBuilder*/
   am(attributes: { [key: string]: string }) {
     const copy = this.copy();
     copy.attr.additionalAttributes = {
@@ -227,20 +240,40 @@ export class TagBuilder extends ExFunc {
     return copy;
   }
 
-  /** Add style */
+  /**
+   * ra = remove attribute
+   * Removes attribute from this TagBuilder, and returns a new TagBuilder
+   */
+  ra(...attr: string[]) {
+    const copy = this.copy();
+    copy.attr.remove(...attr);
+    return copy;
+  }
+
+  /** Adds style, and returns a new TagBuilder*/
   as<T extends CssProperty>(key: T, value: PickPropertyValues<T>) {
     const copy = this.copy();
     copy.attr.style.set(key, value);
     return copy;
   }
 
-  /** Set style as object*/
+  /** Adds style from object, and returns a new TagBuilder */
   ss(styles: StyleMap) {
     const copy = this.copy();
     copy.attr.style.styles = {
       ...copy.attr.style.styles,
       ...styles,
     };
+    return copy;
+  }
+
+  /**
+   * rs = remove styles
+   * Removes styles from this TagBuilder, and returns a new TagBuilder
+   */
+  rs(...styleNames: string[]) {
+    const copy = this.copy();
+    copy.attr.style.remove(...styleNames);
     return copy;
   }
 
@@ -293,6 +326,13 @@ let fns: Partial<BuilderFunctions> = {
 
 for (let tname of tagNames) {
   fns[tname] = tagBuilder(tname);
+  // Object.defineProperty(fns, tname, {
+  //   enumerable: true,
+  //   get(): TagBuilder {
+  //     console.log('get');
+  //     return tagBuilder(tname);
+  //   },
+  // });
 }
 
 export const builders = fns;

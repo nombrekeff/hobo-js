@@ -23,7 +23,7 @@ export class Tag {
     return this.attr.id;
   }
 
-  constructor(tagName: TagName, children: ValidTagChild[] = [], attr: AttrSet, meta: TagMeta) {
+  constructor(tagName: TagName, children: ValidTagChild[], attr: AttrSet, meta: TagMeta) {
     this.tagName = tagName;
     this.children = children;
     this.attr = attr;

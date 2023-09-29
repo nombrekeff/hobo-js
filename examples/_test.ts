@@ -1,10 +1,7 @@
-import { attach, builders, doc, generate } from '../src/hobo';
+import { attach, doc, generate } from '../src/hobo';
+import { builders } from '../src/tag-builder';
 
 const { div, img } = builders;
 
-const root = div.b();
-attach(root);
-
-img.a();
-
-console.log(root);
+console.log(generate(img!.id('src').b()))
+console.log(generate(img!.as('color', 'red').b()))

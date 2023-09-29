@@ -16,9 +16,11 @@ export class StyleSet {
     return this;
   }
 
-  /** Remove a single style */
-  remove(key: string): StyleSet {
-    this.styles[key];
+  /** Remove styles */
+  remove(...styles: string[]): StyleSet {
+    for (const sn of styles) {
+      delete this.styles[sn];
+    }
     return this;
   }
 

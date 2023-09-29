@@ -23,9 +23,11 @@ export class AttrSet {
     return this;
   }
 
-  /** Remove single attribute */
-  remove(key: string): AttrSet {
-    this.additionalAttributes[key];
+  /** Remove attributes */
+  remove(...attrs: string[]): AttrSet {
+    for (const cn of attrs) {
+      delete this.additionalAttributes[cn];
+    }
     return this;
   }
 

@@ -82,6 +82,14 @@ describe('TagBuilder', () => {
     expect(papa.children).toEqual([]);
   });
 
+
+  it('.append works with TagBuilder', async () => {
+
+    const papa = builders.div.append(builders.div);
+
+    expect(papa.children).toEqual([builders.div()]);
+  });
+
   it('.setChildren does not add children for selfClosingTags', async () => {
     const el = builders.div.append('Initial child');
     const child = builders.a();
@@ -110,6 +118,11 @@ describe('TagBuilder', () => {
     expect(el.b().attr.className.classNames).toContain('one');
   });
 
+  it('.rc works', async () => {
+    const el = builders.div.ac('one').rc('one');
+    expect(el.b().attr.className.classNames).not.toContain('one');
+  });
+
   it('.aa works', async () => {
     const el = builders.div.aa('one', 'two').b();
     expect('one' in el.attr.additionalAttributes).toEqual(true);
@@ -122,6 +135,12 @@ describe('TagBuilder', () => {
     expect(el.attr.additionalAttributes['one']).toEqual('two');
   });
 
+  it('.ra works', async () => {
+    const el = builders.div.aa('one', 'two');
+    el.ra('one');
+    expect(el.b().attr.additionalAttributes).not.toContain('one');
+  });
+
   it('.as works', async () => {
     const el = builders.div.as('color', 'red').b();
     expect('color' in el.attr.style.styles).toEqual(true);
@@ -132,6 +151,11 @@ describe('TagBuilder', () => {
     const el = builders.div.ss({ color: 'red' }).b();
     expect('color' in el.attr.style.styles).toEqual(true);
     expect(el.attr.style.styles['color']).toEqual('red');
+  });
+
+  it('.rs works', async () => {
+    const el = builders.div.ss({ color: 'red' }).rs('color').b();
+    expect('color' in el.attr.style.styles).toEqual(false);
   });
 
   it('Error for invalid tag!', async () => {
