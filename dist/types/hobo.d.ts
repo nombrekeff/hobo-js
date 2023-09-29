@@ -1,8 +1,11 @@
 import { Tag } from './tag';
-import { AttachMode, ValidTagChild } from './types/types';
+import { AttachMode, ValidTagChild } from './custom-types/types';
 import { TagBuilder } from './tag-builder';
-import { TagName, ValidTagName } from './types/tag-names';
-/** Creates a HTML document, with a head and body tags */
+import { TagName, ValidTagName } from './custom-types/tag-names';
+/**
+ * Creates an HTML document, with a head and body tags.
+ * You can pass in the AttachMode to attach to different tags.
+ */
 export declare function doc(pageTitle?: string, mode?: AttachMode): {
     doc: Tag;
     head: Tag;
@@ -63,6 +66,10 @@ type BuilderFunctions = {
 } & {
     tag: (tagName: TagName, ...children: ValidTagChild[]) => TagBuilder;
 };
+/** Converts's the Tag tree into a html string */
 export declare function generate(root: Tag): string;
+/**
+ * TagBuilders for each known tag. From `div` to `acronym`
+ */
 export declare const builders: BuilderFunctions;
 export {};

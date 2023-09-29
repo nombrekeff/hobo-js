@@ -9,16 +9,19 @@ class AttrSet {
         this.style = new style_1.StyleSet();
         this.additionalAttributes = {};
     }
+    /** Set single attribute */
     set(key, value) {
         this.additionalAttributes[key] = value;
         return this;
     }
+    /** Remove single attribute */
     remove(key) {
         this.additionalAttributes[key];
         return this;
     }
+    /** Check if an attribute is set */
     has(key) {
-        return this.additionalAttributes[key] != null;
+        return key in this.additionalAttributes;
     }
 }
 exports.AttrSet = AttrSet;

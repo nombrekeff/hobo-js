@@ -7,14 +7,15 @@
   "type": "commonjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc -p . -d"
+    "build": "tsc -p . -d",
+    "tsdoc": "tsdoc --src=src/hobo.ts --dest=docs/API.md"
   },
   "keywords": [],
   "author": "nombrekeff",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^20.7.0",
+    "tsdoc-markdown": "^0.1.0",
     "typescript": "^5.2.2"
-  },
-  "dependencies": {}
+  }
 }

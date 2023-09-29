@@ -3,8 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.builders = exports.TagBuilder = void 0;
 const attributes_1 = require("./attributes");
 const tag_1 = require("./tag");
-const tag_names_1 = require("./types/tag-names");
-const util_1 = require("./util");
+const tag_names_1 = require("./custom-types/tag-names");
 class ExFunc extends Function {
     constructor() {
         super('...args', 'return this.__self__.__call__(...args)');
@@ -14,10 +13,15 @@ class ExFunc extends Function {
     }
     __call__(...children) { }
 }
+/**
+ * TagBuilder class, used to build tags of course.
+ */
 class TagBuilder extends ExFunc {
+    /** Get the tag className */
     get className() {
         return this.attr.className;
     }
+    /** Get the tag id */
     get tagId() {
         return this.attr.id;
     }
@@ -36,10 +40,17 @@ class TagBuilder extends ExFunc {
         this.setTagName(tagName);
         this.children.push(...children);
     }
+    /** Sets and validates the tag name */
     setTagName(name) {
         this.tagName = this.sanitizeTagName(name);
         this.validateTagName(this.tagName);
         this._meta = Object.assign(Object.assign({}, this._meta), this.getMetaForTag(this.tagName));
+    }
+    /**
+     * Build the tag with additional children
+     */
+    b(...children) {
+        return this.__call__(...children);
     }
     __call__(...children) {
         let tagChildren = [...children, ...this.children];
@@ -57,31 +68,10 @@ class TagBuilder extends ExFunc {
     get a() {
         return this;
     }
+    /** Set the parent of the tag. If a parent is set, this tag will be added as a child when built */
     p(parent) {
         this._parent = parent;
         return this;
-    }
-    // Utilities
-    getMetaForTag(tagName) {
-        return {
-            selfClosing: this.isSelfClosingTag(tagName),
-            storesChildren: this.isStorableTag(tagName),
-            storage: null,
-        };
-    }
-    isSelfClosingTag(tagName) {
-        return tag_names_1.selfClosingTags.includes(tagName);
-    }
-    isStorableTag(tagName) {
-        return tag_names_1.storableTags.includes(tagName);
-    }
-    validateTagName(tagName) {
-        if (!/[a-zA-Z_][a-z-A-Z0-9_]*/.test(tagName)) {
-            throw new Error(`Invalid tag name "${tagName}"`);
-        }
-    }
-    sanitizeTagName(tagName) {
-        return tagName.replace(/[^\w\d]/, '');
     }
     /**
      * Set the id of the tag
@@ -96,6 +86,10 @@ class TagBuilder extends ExFunc {
         this.children = [content];
         return this;
     }
+    /**
+     * Adds tags as children if the tag can have children.
+     * For example, if tag is `img` there's no need to add the childre as they will not be generated.
+     */
     append(...tags) {
         if (this._meta.selfClosing) {
             return;
@@ -103,10 +97,12 @@ class TagBuilder extends ExFunc {
         this.children.push(...tags);
         return this;
     }
+    /** Set the children of this tag. Replaces any current children */
     setChildren(children) {
         this.children = children;
         return this;
     }
+    /** Store metadata inside tag. Internal method, you won't need this */
     store(o) {
         this._meta.storage = o;
     }
@@ -134,7 +130,7 @@ class TagBuilder extends ExFunc {
         return this;
     }
     /**
-     * cm = classname modify
+     * mc = modify classname
      * If the argument is a function
      *
      * Shortcut for modifying the classnames of a tag. Similar to the `.m` method
@@ -142,20 +138,20 @@ class TagBuilder extends ExFunc {
      *
      * @example
      * ```ts
-     * div([
-     *    p("Child1").c(c => c.add("child-1")),
-     *    p("Child1").c(c => c.add("child-2"))
-     * ])
+     * div(
+     *    p("Child1").mc(c => c.add("child-1")),
+     *    p("Child1").mc(c => c.add("child-2"))
+     * )
      * ```
      */
-    cm(arg0) {
+    mc(arg0) {
         return this.m((t) => arg0(t.className));
     }
     /**
-     * ca = classname add
+     * ac = add classname
      * Adds classNames to this Tag, and retuns this Tag
      */
-    ca(...classNames) {
+    ac(...classNames) {
         this.className.add(...classNames);
         return this;
     }
@@ -170,7 +166,7 @@ class TagBuilder extends ExFunc {
         return this;
     }
     /** Add style */
-    sa(key, value) {
+    as(key, value) {
         this.attr.style.set(key, value);
         return this;
     }
@@ -179,9 +175,27 @@ class TagBuilder extends ExFunc {
         this.attr.style.styles = Object.assign(Object.assign({}, this.attr.style.styles), styles);
         return this;
     }
-    on(event, fn) {
-        this.attr.set(`on${event}`, (0, util_1.replaceDoubleQuotes)((0, util_1.justFnBody)(fn)));
-        return this;
+    // Utilities
+    getMetaForTag(tagName) {
+        return {
+            selfClosing: this.isSelfClosingTag(tagName),
+            storesChildren: this.isStorableTag(tagName),
+            storage: null,
+        };
+    }
+    isSelfClosingTag(tagName) {
+        return tag_names_1.selfClosingTags.includes(tagName);
+    }
+    isStorableTag(tagName) {
+        return tag_names_1.storableTags.includes(tagName);
+    }
+    validateTagName(tagName) {
+        if (!/[a-zA-Z_][a-z-A-Z0-9_]*/.test(tagName)) {
+            throw new Error(`Invalid tag name "${tagName}"`);
+        }
+    }
+    sanitizeTagName(tagName) {
+        return tagName.replace(/[^\w\d]/, '');
     }
 }
 exports.TagBuilder = TagBuilder;

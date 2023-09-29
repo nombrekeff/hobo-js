@@ -1,6 +1,6 @@
-import { TagName } from './types/tag-names';
+import { TagName } from './custom-types/tag-names';
 import { AttrSet } from './attributes';
-import { FindBy, TagMeta, ValidTagChild } from './types/types';
+import { FindBy, TagMeta, ValidTagChild } from './custom-types/types';
 
 export class Tag {
   tagName: TagName;

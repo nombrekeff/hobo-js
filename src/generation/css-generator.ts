@@ -1,5 +1,5 @@
 // import cssbeautify from 'cssbeautify';
-import { StyleMap } from '../types/types';
+import { StyleMap } from '../custom-types/types';
 import { camelToDash } from '../util';
 
 export class CssGenerator {

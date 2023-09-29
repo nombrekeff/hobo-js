@@ -1,8 +1,9 @@
 import { Tag } from '../tag';
-import { HoboContext } from '../types/types';
+import { HoboContext } from '../custom-types/types';
 export declare class HtmlGenerator {
     private cssGenerator;
     beautifyCss: boolean;
+    /** Generate html from the tag provided */
     generateHtml(rootTag: Tag, context?: HoboContext): string;
     private _generateTag;
     private _createTag;

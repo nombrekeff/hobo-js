@@ -4,11 +4,13 @@ exports.HtmlGenerator = void 0;
 const tag_1 = require("../tag");
 const css_generator_1 = require("./css-generator");
 const util_1 = require("../util");
+const tag_builder_1 = require("../tag-builder");
 class HtmlGenerator {
     constructor() {
         this.cssGenerator = new css_generator_1.CssGenerator();
         this.beautifyCss = true;
     }
+    /** Generate html from the tag provided */
     generateHtml(rootTag, context) {
         let generatedHtml = this._generateTag(rootTag);
         return generatedHtml;
@@ -28,8 +30,8 @@ class HtmlGenerator {
             else if (child instanceof tag_1.Tag) {
                 inside += this._generateTag(child) + '\n';
             }
-            else {
-                throw new Error('Not handled' + child);
+            else if (child instanceof tag_builder_1.TagBuilder) {
+                inside += this._generateTag(child.b()) + '\n';
             }
         }
         return this._createTag(tag, inside);

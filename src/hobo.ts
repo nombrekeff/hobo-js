@@ -1,9 +1,9 @@
 // import * as fs from 'fs';
 import { Tag } from './tag';
 import { HtmlGenerator } from './generation/html-generator';
-import { AttachMode, HoboContext, ValidTagChild } from './types/types';
+import { AttachMode, HoboContext, ValidTagChild } from './custom-types/types';
 import { builders as tagBuilders, TagBuilder } from './tag-builder';
-import { TagName, ValidTagName } from './types/tag-names';
+import { TagName, ValidTagName } from './custom-types/tag-names';
 
 let _context: HoboContext = {
   attachedTag: null,

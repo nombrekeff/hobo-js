@@ -6,9 +6,13 @@ class ClassName {
         this.classNames = [];
         this.classNames = classNames;
     }
+    /**
+     * Returns a string of all the class names separated by spaces.
+     */
     raw() {
         return this.classNames.join(' ');
     }
+    /** Add one or more class names */
     add(...classNames) {
         for (const cn of classNames) {
             if (!this.has(cn)) {
@@ -17,6 +21,7 @@ class ClassName {
         }
         return this;
     }
+    /** Remove one or more class names */
     remove(...classNames) {
         for (const cn of classNames) {
             if (!this.has(cn))
@@ -26,6 +31,7 @@ class ClassName {
         }
         return this;
     }
+    /** Check if a class name is present. */
     has(str) {
         return this.classNames.includes(str);
     }

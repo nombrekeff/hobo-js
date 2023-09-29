@@ -2,14 +2,17 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.builders = exports.generate = exports.detach = exports.attach = exports.doc = void 0;
 const html_generator_1 = require("./generation/html-generator");
-const types_1 = require("./types/types");
+const types_1 = require("./custom-types/types");
 const tag_builder_1 = require("./tag-builder");
 let _context = {
     attachedTag: null,
     attachedTagStack: [],
     globalStuff: [],
 };
-/** Creates a HTML document, with a head and body tags */
+/**
+ * Creates an HTML document, with a head and body tags.
+ * You can pass in the AttachMode to attach to different tags.
+ */
 function doc(pageTitle = 'New Hobo Document', mode = types_1.AttachMode.body) {
     const dhead = exports.builders.head(exports.builders.title(pageTitle));
     const dbody = exports.builders.body();
@@ -109,9 +112,13 @@ for (let key in tag_builder_1.builders) {
     exportedTagBuilders[key] = makeAttachable(tag_builder_1.builders[key]);
 }
 const _generator = new html_generator_1.HtmlGenerator();
+/** Converts's the Tag tree into a html string */
 function generate(root) {
     return _generator.generateHtml(root, _context);
 }
 exports.generate = generate;
+/**
+ * TagBuilders for each known tag. From `div` to `acronym`
+ */
 exports.builders = exportedTagBuilders;
 //# sourceMappingURL=hobo.js.map

@@ -9,19 +9,19 @@ export class AttrSet {
   additionalAttributes: { [key: string]: string } = {};
 
   /** Set single attribute */
-  set(key: string, value: string) {
+  set(key: string, value: string): AttrSet {
     this.additionalAttributes[key] = value;
     return this;
   }
 
   /** Remove single attribute */
-  remove(key: string) {
+  remove(key: string): AttrSet {
     this.additionalAttributes[key];
     return this;
   }
 
   /** Check if an attribute is set */
-  has(key: string) {
+  has(key: string): boolean {
     return key in this.additionalAttributes;
   }
 }

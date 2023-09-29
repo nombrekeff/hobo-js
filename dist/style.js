@@ -5,20 +5,20 @@ class StyleSet {
     constructor() {
         this.styles = {};
     }
+    /** Set a single style */
     set(key, value) {
         this.styles[key] = value;
         return this;
     }
+    /** Remove a single style */
     remove(key) {
         this.styles[key];
         return this;
     }
+    /** Check if a style is set */
     has(key) {
-        return this.styles[key] != null;
+        return key in this.styles;
     }
 }
 exports.StyleSet = StyleSet;
-let s = new StyleSet();
-s.styles.color = '';
-s.styles['align-content'] = 'center';
 //# sourceMappingURL=style.js.map

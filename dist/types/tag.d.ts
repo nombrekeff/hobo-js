@@ -1,9 +1,6 @@
-import { TagName } from './types/tag-names';
+import { TagName } from './custom-types/tag-names';
 import { AttrSet } from './attributes';
-import { FindBy, TagMeta, ValidTagChild } from './types/types';
-/**
- * Can throw if the tag name is not valid.
- */
+import { FindBy, TagMeta, ValidTagChild } from './custom-types/types';
 export declare class Tag {
     tagName: TagName;
     children: ValidTagChild[];
@@ -12,7 +9,10 @@ export declare class Tag {
     get className(): import("./class-name").ClassName;
     get tagId(): string;
     constructor(tagName: TagName, children: ValidTagChild[], attr: AttrSet, meta: TagMeta);
+    /** Append children  */
     append(child: ValidTagChild): void;
+    /** Find a child by tag name  */
     findByTagName(targetTagName: TagName): Tag;
+    /** Find a child by custom test  */
     findOneBy(test: FindBy): Tag | null;
 }

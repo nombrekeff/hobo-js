@@ -1,6 +1,6 @@
 import { Tag } from '../tag';
 import { CssGenerator } from './css-generator';
-import { HoboContext } from '../types/types';
+import { HoboContext } from '../custom-types/types';
 import { justFnBody } from '../util';
 import { TagBuilder } from '../tag-builder';
 

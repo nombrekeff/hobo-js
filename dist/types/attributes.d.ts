@@ -7,7 +7,10 @@ export declare class AttrSet {
     additionalAttributes: {
         [key: string]: string;
     };
-    set(key: string, value: string): this;
-    remove(key: string): this;
+    /** Set single attribute */
+    set(key: string, value: string): AttrSet;
+    /** Remove single attribute */
+    remove(key: string): AttrSet;
+    /** Check if an attribute is set */
     has(key: string): boolean;
 }

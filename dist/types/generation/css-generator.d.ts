@@ -1,4 +1,4 @@
-import { StyleMap } from '../types/types';
+import { StyleMap } from '../custom-types/types';
 export declare class CssGenerator {
     beautify: boolean;
     constructor(beautify?: boolean);

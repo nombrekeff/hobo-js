@@ -1,10 +1,10 @@
 import { AttrSet } from './attributes';
 import { ClassName } from './class-name';
 import { Tag } from './tag';
-import { CssProperty } from './types/css-properties';
-import { PickPropertyValues } from './types/css-property-values';
-import { TagName, ValidTagName, allKnownTags, selfClosingTags, storableTags } from './types/tag-names';
-import { HtmlEventType, StyleMap, TagMeta, ValidTagChild } from './types/types';
+import { CssProperty } from './custom-types/css-properties';
+import { PickPropertyValues } from './custom-types/css-property-values';
+import { TagName, ValidTagName, allKnownTags, selfClosingTags, storableTags } from './custom-types/tag-names';
+import { HtmlEventType, StyleMap, TagMeta, ValidTagChild } from './custom-types/types';
 import { replaceDoubleQuotes, justFnBody } from './util';
 
 class ExFunc extends Function {
