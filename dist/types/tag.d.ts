@@ -12,7 +12,7 @@ export declare class Tag {
     /** Append children  */
     append(child: ValidTagChild): void;
     /** Find a child by tag name  */
-    findByTagName(targetTagName: TagName): Tag;
+    findByTagName(targetTagName: TagName): Tag | null;
     /** Find a child by custom test  */
     findOneBy(test: FindBy): Tag | null;
 }

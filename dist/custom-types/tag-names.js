@@ -20,7 +20,6 @@ exports.selfClosingTags = [
 exports.closingTags = [
     'a',
     'abbr',
-    'abbr',
     'acronym',
     'address',
     'article',
@@ -136,7 +135,6 @@ exports.allKnownTags = [
     'track',
     'wbr',
     'a',
-    'abbr',
     'abbr',
     'acronym',
     'address',

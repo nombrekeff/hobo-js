@@ -10,5 +10,4 @@ export declare class HtmlGenerator {
     private _generateInlineStyle;
     private _generateScriptContent;
     private _attr;
-    private _style;
 }

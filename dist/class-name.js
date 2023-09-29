@@ -6,6 +6,11 @@ class ClassName {
         this.classNames = [];
         this.classNames = classNames;
     }
+    copy() {
+        const newClassName = new ClassName();
+        newClassName.classNames = [...this.classNames];
+        return newClassName;
+    }
     /**
      * Returns a string of all the class names separated by spaces.
      */

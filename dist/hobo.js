@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.builders = exports.generate = exports.detach = exports.attach = exports.doc = void 0;
+exports.builders = exports.generate = exports.detach = exports.attach = exports.doc = exports._context = void 0;
 const html_generator_1 = require("./generation/html-generator");
 const types_1 = require("./custom-types/types");
 const tag_builder_1 = require("./tag-builder");
-let _context = {
+exports._context = {
     attachedTag: null,
     attachedTagStack: [],
     globalStuff: [],
@@ -24,11 +24,10 @@ function doc(pageTitle = 'New Hobo Document', mode = types_1.AttachMode.body) {
         case types_1.AttachMode.head:
             attach(doc.findByTagName('head')); // We know there is a head tag
             break;
-        case types_1.AttachMode.none:
-            break;
-        default:
         case types_1.AttachMode.body:
             attach(doc.findByTagName('body')); // We know there is a body tag
+            break;
+        case types_1.AttachMode.none:
             break;
     }
     return { doc, head: dhead, body: dbody };
@@ -76,10 +75,10 @@ exports.doc = doc;
  * ```
  */
 function attach(tag) {
-    if (_context.attachedTag) {
-        _context.attachedTagStack.push(_context.attachedTag);
+    if (exports._context.attachedTag) {
+        exports._context.attachedTagStack.push(exports._context.attachedTag);
     }
-    _context.attachedTag = tag;
+    exports._context.attachedTag = tag;
 }
 exports.attach = attach;
 /**
@@ -88,19 +87,19 @@ exports.attach = attach;
  * You will need to handle the consecuent created tags.
  */
 function detach() {
-    if (_context.attachedTagStack.length > 0) {
-        _context.attachedTag = _context.attachedTagStack.pop();
+    if (exports._context.attachedTagStack.length > 0) {
+        exports._context.attachedTag = exports._context.attachedTagStack.pop();
     }
     else {
-        _context.attachedTag = null;
+        exports._context.attachedTag = null;
     }
 }
 exports.detach = detach;
 function makeAttachable(builder) {
     Object.defineProperty(builder, 'a', {
         get: () => {
-            if (_context.attachedTag) {
-                builder.p(_context.attachedTag);
+            if (exports._context.attachedTag) {
+                return builder.p(exports._context.attachedTag);
             }
             return builder;
         },

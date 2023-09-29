@@ -1,6 +1,7 @@
 export declare class ClassName {
     classNames: string[];
     constructor(classNames?: string[]);
+    copy(): ClassName;
     /**
      * Returns a string of all the class names separated by spaces.
      */

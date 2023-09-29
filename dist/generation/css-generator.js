@@ -6,26 +6,30 @@ class CssGenerator {
     constructor(beautify = true) {
         this.beautify = beautify;
     }
-    generate(styleSheet) {
+    generateCss(styleSheet) {
         let stylesheets = styleSheet instanceof Array ? styleSheet : [styleSheet];
         let generatedCss = '';
         for (const sheet of stylesheets) {
             for (const key in sheet) {
-                generatedCss += this._generateBlock(key, sheet[key]);
+                generatedCss += this.generateBlock(key, sheet[key]);
             }
         }
         return generatedCss;
     }
-    _generateBlock(selector, style) {
+    generateBlock(selector, style) {
+        let inside = this.generateBlockContent(style);
+        return `${(0, util_1.camelToDash)(selector)} {${inside}}`;
+    }
+    generateBlockContent(style) {
         let inside = '';
         for (const key in style) {
             if (style[key])
-                inside += this._generateStyle(key, style[key]);
+                inside += this.generateStyle(key, style[key]);
         }
-        return `${(0, util_1.camelToDash)(selector)} { ${inside} }`;
+        return inside;
     }
-    _generateStyle(name, value) {
-        return `${(0, util_1.camelToDash)(name)}: ${value};`;
+    generateStyle(name, value) {
+        return `${(0, util_1.camelToDash)(name)}:${value};`;
     }
 }
 exports.CssGenerator = CssGenerator;

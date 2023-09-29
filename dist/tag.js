@@ -10,7 +10,7 @@ class Tag {
     get tagId() {
         return this.attr.id;
     }
-    constructor(tagName, children = [], attr, meta) {
+    constructor(tagName, children, attr, meta) {
         this.children = [];
         this.attr = new attributes_1.AttrSet();
         this._meta = {

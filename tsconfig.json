@@ -12,6 +12,6 @@
     "types": ["node", "jest"],
     "declarationDir": "dist/types"
   },
-  "exclude": ["./dist/", "./examples/"],
+  "exclude": ["./dist/", "./examples/", "./tests/", "./bin/"],
   "lib": ["es2015", "dom"]
 }

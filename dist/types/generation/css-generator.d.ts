@@ -2,11 +2,12 @@ import { StyleMap } from '../custom-types/types';
 export declare class CssGenerator {
     beautify: boolean;
     constructor(beautify?: boolean);
-    generate(styleSheet: {
+    generateCss(styleSheet: {
         [key: string]: StyleMap;
     } | {
         [key: string]: StyleMap;
     }[]): string;
-    private _generateBlock;
-    private _generateStyle;
+    generateBlock(selector: string, style: StyleMap): string;
+    generateBlockContent(style: StyleMap): string;
+    generateStyle(name: string, value: string): string;
 }

@@ -1,7 +1,8 @@
 import { Tag } from './tag';
-import { AttachMode, ValidTagChild } from './custom-types/types';
+import { AttachMode, HoboContext, ValidTagChild } from './custom-types/types';
 import { TagBuilder } from './tag-builder';
 import { TagName, ValidTagName } from './custom-types/tag-names';
+export declare let _context: HoboContext;
 /**
  * Creates an HTML document, with a head and body tags.
  * You can pass in the AttachMode to attach to different tags.

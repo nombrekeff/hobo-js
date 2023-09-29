@@ -24,36 +24,37 @@ export declare class TagBuilder extends ExFunc {
      * Do not modify directly, use helper methods in the tag instead.
      */
     attr: AttrSet;
-    private _parent;
+    _parent: Tag;
     _meta: TagMeta;
     constructor(tagName: TagName, ...children: ValidTagChild[]);
+    copy(): TagBuilder;
     /** Sets and validates the tag name */
-    setTagName(name: string): void;
+    setTagName(name: string): this;
     /**
      * Build the tag with additional children
      */
     b(...children: ValidTagChild[]): Tag;
     __call__(...children: ValidTagChild[]): Tag;
     /** Attach to the currently attached tag in the global hobo context */
-    get a(): this;
+    get a(): TagBuilder;
     /** Set the parent of the tag. If a parent is set, this tag will be added as a child when built */
-    p(parent: Tag): this;
+    p(parent: Tag): TagBuilder;
     /**
      * Set the id of the tag
      * Can't be empty
      */
-    id<T extends string>(newId: T extends '' ? never : T): this;
+    id<T extends string>(newId: T extends '' ? never : T): TagBuilder;
     /** replaces the children of this tag with the provided string */
-    text(content: string): this;
+    text(content: string): TagBuilder;
     /**
      * Adds tags as children if the tag can have children.
      * For example, if tag is `img` there's no need to add the childre as they will not be generated.
      */
-    append(...tags: ValidTagChild[]): this;
+    append(...tags: ValidTagChild[]): TagBuilder;
     /** Set the children of this tag. Replaces any current children */
-    setChildren(children: ValidTagChild[]): this;
+    setChildren(children: ValidTagChild[]): TagBuilder;
     /** Store metadata inside tag. Internal method, you won't need this */
-    store(o: any): void;
+    store(o: any): TagBuilder;
     /**
      * cm = modify
      * calls `fn` with the tag, and returns the tag
@@ -73,13 +74,15 @@ export declare class TagBuilder extends ExFunc {
      * ])
      * ```
      */
-    m(fn: (tag: TagBuilder) => void): this;
+    m(fn: (tag: TagBuilder) => void): TagBuilder;
     /**
      * mc = modify classname
      * If the argument is a function
      *
      * Shortcut for modifying the classnames of a tag. Similar to the `.m` method
      * but it passes the className instead of the complete tag.
+     *
+     * Retuns a new TagBuilder
      *
      * @example
      * ```ts
@@ -89,22 +92,37 @@ export declare class TagBuilder extends ExFunc {
      * )
      * ```
      */
-    mc(arg0: (c: ClassName) => void): this;
+    mc(arg0: (c: ClassName) => void): TagBuilder;
     /**
      * ac = add classname
-     * Adds classNames to this Tag, and retuns this Tag
+     * Adds classNames to this TagBuilder, and returns a new TagBuilder
      */
-    ac(...classNames: string[]): this;
-    /** Add attribute */
-    aa(key: string, value: string): this;
-    /** Add multiple atributes at once */
+    ac(...classNames: string[]): TagBuilder;
+    /**
+     * rc = remove classname
+     * Removes classNames from this TagBuilder, and returns a new TagBuilder
+     */
+    rc(...classNames: string[]): TagBuilder;
+    /** Adds attribute, and returns a new TagBuilder */
+    aa(key: string, value: string): TagBuilder;
+    /** Adds multiple atributes at once, and returns a new TagBuilder*/
     am(attributes: {
         [key: string]: string;
-    }): this;
-    /** Add style */
-    as<T extends CssProperty>(key: T, value: PickPropertyValues<T>): this;
-    /** Set style as object*/
-    ss(styles: StyleMap): this;
+    }): TagBuilder;
+    /**
+     * ra = remove attribute
+     * Removes attribute from this TagBuilder, and returns a new TagBuilder
+     */
+    ra(...attr: string[]): TagBuilder;
+    /** Adds style, and returns a new TagBuilder*/
+    as<T extends CssProperty>(key: T, value: PickPropertyValues<T>): TagBuilder;
+    /** Adds style from object, and returns a new TagBuilder */
+    ss(styles: StyleMap): TagBuilder;
+    /**
+     * rs = remove styles
+     * Removes styles from this TagBuilder, and returns a new TagBuilder
+     */
+    rs(...styleNames: string[]): TagBuilder;
     private getMetaForTag;
     private isSelfClosingTag;
     private isStorableTag;

@@ -17,7 +17,7 @@ class HtmlGenerator {
     }
     _generateTag(tag) {
         if (tag.tagName == 'style') {
-            return this._createTag(tag, this.cssGenerator.generate(tag._meta.storage));
+            return this._createTag(tag, this.cssGenerator.generateCss(tag._meta.storage));
         }
         if (tag.tagName == 'script') {
             return this._createTag(tag, this._generateScriptContent(tag._meta.storage));
@@ -29,19 +29,11 @@ class HtmlGenerator {
                 effectiveChild = child.b();
             }
             if (effectiveChild instanceof tag_1.Tag) {
-                inside += this._generateTag(effectiveChild) + '\n';
+                inside += this._generateTag(effectiveChild);
             }
             else {
                 inside += child;
             }
-            // if (typeof child === 'string') {
-            //   inside += child;
-            // } else if (child instanceof Tag) {
-            //   inside += this._generateTag(child) + '\n';
-            // } else if (child instanceof TagBuilder) {
-            //   const newChild = child();
-            //   inside += this._generateTag(newChild) + '\n';
-            // }
         }
         return this._createTag(tag, inside);
     }
@@ -66,10 +58,7 @@ class HtmlGenerator {
         return attributesString;
     }
     _generateInlineStyle(tag) {
-        let styleContent = '';
-        for (const key in tag.attr.style.styles) {
-            styleContent += this._style(key, tag.attr.style.styles[key]);
-        }
+        let styleContent = this.cssGenerator.generateBlockContent(tag.attr.style.styles);
         return this._attr('style', styleContent);
     }
     _generateScriptContent(storage) {
@@ -88,11 +77,6 @@ class HtmlGenerator {
         if (!value)
             return '';
         return `${name}="${value}"`;
-    }
-    _style(name, value) {
-        if (!value)
-            return '';
-        return `${name}: ${value};`;
     }
 }
 exports.HtmlGenerator = HtmlGenerator;
