@@ -44,7 +44,8 @@ const { div, p, span, b, script, button, style, a, hr } = builders;
 
 Check out the [`examples`](/examples) folder for a variety of examples on how to use hobo.
 
-### [Docs](./docs/api.md)
+### Docs
+You can find docs [here](https://nombrekeff.github.io/hobo-js/)
 
 ### Demo
 
