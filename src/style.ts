@@ -4,21 +4,20 @@ import { PickPropertyValues } from './types/css-property-values';
 export class StyleSet {
   styles: { [key in CssProperty]?: PickPropertyValues<key> } = {};
 
+  /** Set a single style */
   set<T extends CssProperty>(key: T, value: PickPropertyValues<T>) {
     this.styles[key] = value as any;
     return this;
   }
 
+  /** Remove a single style */
   remove(key: string) {
     this.styles[key];
     return this;
   }
 
+  /** Check if a style is set */
   has(key: string) {
-    return this.styles[key as any] != null;
+    return key in this.styles;
   }
 }
-
-let s = new StyleSet();
-s.styles.color = '';
-s.styles['align-content'] = 'center';

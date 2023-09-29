@@ -1,11 +1,14 @@
 import { Tag } from '../tag';
 import { CssGenerator } from './css-generator';
 import { HoboContext } from '../types/types';
+import { justFnBody } from '../util';
+import { TagBuilder } from '../tag-builder';
 
 export class HtmlGenerator {
   private cssGenerator = new CssGenerator();
   public beautifyCss = true;
 
+  /** Generate html from the tag provided */
   generateHtml(rootTag: Tag, context?: HoboContext): string {
     let generatedHtml = this._generateTag(rootTag);
     return generatedHtml;
@@ -17,7 +20,7 @@ export class HtmlGenerator {
     }
 
     if (tag.tagName == 'script') {
-      return this._createTag(tag, tag._meta.storage);
+      return this._createTag(tag, this._generateScriptContent(tag._meta.storage));
     }
 
     let inside = '';
@@ -25,11 +28,13 @@ export class HtmlGenerator {
     for (const child of tag.children) {
       if (typeof child === 'string') {
         inside += child;
-      } else if (child instanceof Tag) {
+      } 
+      else if (child instanceof Tag) {
         inside += this._generateTag(child) + '\n';
-      } else {
-        throw new Error('Not handled' + child);
-      }
+      } 
+      else if (child instanceof TagBuilder) {
+        inside += this._generateTag(child.b()) + '\n';
+      } 
     }
 
     return this._createTag(tag, inside);
@@ -71,6 +76,20 @@ export class HtmlGenerator {
     }
 
     return this._attr('style', styleContent);
+  }
+
+  private _generateScriptContent(storage: Function | Function[]): string {
+    let scriptContent = '';
+
+    if (storage instanceof Function) {
+      scriptContent += justFnBody(storage);
+    } else if (storage instanceof Array) {
+      for (const fn of storage) {
+        scriptContent += this._generateScriptContent(fn);
+      }
+    }
+
+    return scriptContent;
   }
 
   private _attr(name: string, value: string) {

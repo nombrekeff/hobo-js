@@ -238,6 +238,8 @@ export const allKnownTags = [
   'video',
 ];
 
+export const storableTags = ['style', 'script'];
+
 export type TagName = ValidTagName | (string & {})
 export type ValidTagName =
   | 'a'
