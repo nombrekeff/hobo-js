@@ -114,7 +114,7 @@ for (let key in tag_builder_1.builders) {
 const _generator = new html_generator_1.HtmlGenerator();
 /** Converts's the Tag tree into a html string */
 function generate(root) {
-    return _generator.generateHtml(root, _context);
+    return _generator.generateHtml(root);
 }
 exports.generate = generate;
 /**

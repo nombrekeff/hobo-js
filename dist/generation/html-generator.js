@@ -11,7 +11,7 @@ class HtmlGenerator {
         this.beautifyCss = true;
     }
     /** Generate html from the tag provided */
-    generateHtml(rootTag, context) {
+    generateHtml(rootTag) {
         let generatedHtml = this._generateTag(rootTag);
         return generatedHtml;
     }
@@ -24,15 +24,24 @@ class HtmlGenerator {
         }
         let inside = '';
         for (const child of tag.children) {
-            if (typeof child === 'string') {
+            let effectiveChild = child;
+            if (child instanceof tag_builder_1.TagBuilder) {
+                effectiveChild = child.b();
+            }
+            if (effectiveChild instanceof tag_1.Tag) {
+                inside += this._generateTag(effectiveChild) + '\n';
+            }
+            else {
                 inside += child;
             }
-            else if (child instanceof tag_1.Tag) {
-                inside += this._generateTag(child) + '\n';
-            }
-            else if (child instanceof tag_builder_1.TagBuilder) {
-                inside += this._generateTag(child.b()) + '\n';
-            }
+            // if (typeof child === 'string') {
+            //   inside += child;
+            // } else if (child instanceof Tag) {
+            //   inside += this._generateTag(child) + '\n';
+            // } else if (child instanceof TagBuilder) {
+            //   const newChild = child();
+            //   inside += this._generateTag(newChild) + '\n';
+            // }
         }
         return this._createTag(tag, inside);
     }

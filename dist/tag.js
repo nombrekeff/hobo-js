@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Tag = void 0;
 const attributes_1 = require("./attributes");
+const tag_builder_1 = require("./tag-builder");
 class Tag {
     get className() {
         return this.attr.className;
@@ -24,6 +25,8 @@ class Tag {
     }
     /** Append children  */
     append(child) {
+        if (child instanceof tag_builder_1.TagBuilder)
+            child = child.b();
         this.children.push(child);
     }
     /** Find a child by tag name  */

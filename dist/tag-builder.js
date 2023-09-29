@@ -53,7 +53,7 @@ class TagBuilder extends ExFunc {
         return this.__call__(...children);
     }
     __call__(...children) {
-        let tagChildren = [...children, ...this.children];
+        let tagChildren = [...this.children, ...children];
         if (this._meta.storesChildren) {
             this._meta.storage = children;
             tagChildren = [];
@@ -92,9 +92,9 @@ class TagBuilder extends ExFunc {
      */
     append(...tags) {
         if (this._meta.selfClosing) {
-            return;
+            return this;
         }
-        this.children.push(...tags);
+        this.children.push(...tags.map((c) => (c instanceof TagBuilder ? c.b() : c)));
         return this;
     }
     /** Set the children of this tag. Replaces any current children */

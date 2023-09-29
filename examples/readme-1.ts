@@ -36,4 +36,4 @@ script.a(() => {
   const btn = document.querySelector('#button-id');
 });
 
-fs.writeFileSync(path.join(__dirname, 'readme-1.html'), generate(myPage.doc));
+fs.writeFileSync(path.join(__dirname, 'generated/readme-1.html'), generate(myPage.doc));
