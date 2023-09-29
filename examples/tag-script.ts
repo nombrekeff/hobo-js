@@ -4,9 +4,7 @@ import { builders, generate } from '../src/hobo';
 
 const { div, script } = builders;
 
-const root = div;
-
-root.append(
+const root = div.append(
   script(() => {
     const rootDiv = document.querySelector('div');
   }),

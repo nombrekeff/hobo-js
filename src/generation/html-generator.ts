@@ -1,6 +1,5 @@
 import { Tag } from '../tag';
 import { CssGenerator } from './css-generator';
-import { HoboContext } from '../custom-types/types';
 import { justFnBody } from '../util';
 import { TagBuilder } from '../tag-builder';
 
@@ -16,7 +15,7 @@ export class HtmlGenerator {
 
   private _generateTag(tag: Tag) {
     if (tag.tagName == 'style') {
-      return this._createTag(tag, this.cssGenerator.generate(tag._meta.storage));
+      return this._createTag(tag, this.cssGenerator.generateCss(tag._meta.storage));
     }
 
     if (tag.tagName == 'script') {
@@ -33,19 +32,10 @@ export class HtmlGenerator {
       }
 
       if (effectiveChild instanceof Tag) {
-        inside += this._generateTag(effectiveChild) + '\n';
+        inside += this._generateTag(effectiveChild);
       } else {
         inside += child;
       }
-
-      // if (typeof child === 'string') {
-      //   inside += child;
-      // } else if (child instanceof Tag) {
-      //   inside += this._generateTag(child) + '\n';
-      // } else if (child instanceof TagBuilder) {
-      //   const newChild = child();
-      //   inside += this._generateTag(newChild) + '\n';
-      // }
     }
 
     return this._createTag(tag, inside);
@@ -80,12 +70,7 @@ export class HtmlGenerator {
   }
 
   private _generateInlineStyle(tag: Tag) {
-    let styleContent = '';
-
-    for (const key in tag.attr.style.styles) {
-      styleContent += this._style(key, tag.attr.style.styles[key]);
-    }
-
+    let styleContent = this.cssGenerator.generateBlockContent(tag.attr.style.styles);
     return this._attr('style', styleContent);
   }
 
@@ -106,10 +91,5 @@ export class HtmlGenerator {
   private _attr(name: string, value: string) {
     if (!value) return '';
     return `${name}="${value}"`;
-  }
-
-  private _style(name: string, value: string | undefined) {
-    if (!value) return '';
-    return `${name}: ${value};`;
   }
 }

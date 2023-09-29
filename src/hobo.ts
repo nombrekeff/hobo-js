@@ -5,7 +5,7 @@ import { AttachMode, HoboContext, ValidTagChild } from './custom-types/types';
 import { builders as tagBuilders, TagBuilder } from './tag-builder';
 import { TagName, ValidTagName } from './custom-types/tag-names';
 
-let _context: HoboContext = {
+export let _context: HoboContext = {
   attachedTag: null,
   attachedTagStack: [],
   globalStuff: [],
@@ -27,11 +27,10 @@ export function doc(pageTitle: string = 'New Hobo Document', mode: AttachMode = 
     case AttachMode.head:
       attach(doc.findByTagName('head') as Tag); // We know there is a head tag
       break;
-    case AttachMode.none:
-      break;
-    default:
     case AttachMode.body:
       attach(doc.findByTagName('body') as Tag); // We know there is a body tag
+      break;
+    case AttachMode.none:
       break;
   }
 
@@ -103,7 +102,7 @@ function makeAttachable(builder: TagBuilder): TagBuilder & { a: TagBuilder } {
   Object.defineProperty(builder, 'a', {
     get: () => {
       if (_context.attachedTag) {
-        builder.p(_context.attachedTag);
+        return builder.p(_context.attachedTag);
       }
       return builder;
     },

@@ -5,9 +5,9 @@ import { TagBuilder } from './tag-builder';
 
 export class Tag {
   tagName: TagName;
-  
+
   children: ValidTagChild[] = [];
-  
+
   attr: AttrSet = new AttrSet();
 
   _meta: TagMeta = {
@@ -32,12 +32,12 @@ export class Tag {
 
   /** Append children  */
   append(child: ValidTagChild) {
-    if(child instanceof TagBuilder) child = child.b();
+    if (child instanceof TagBuilder) child = child.b();
     this.children.push(child);
   }
 
   /** Find a child by tag name  */
-  findByTagName(targetTagName: TagName) {
+  findByTagName(targetTagName: TagName): Tag | null {
     return this.findOneBy((t) => t.tagName == targetTagName);
   }
 

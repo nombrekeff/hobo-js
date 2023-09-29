@@ -42,8 +42,7 @@ export class TagBuilder extends ExFunc {
    */
   attr: AttrSet = new AttrSet();
 
-  private _parent: Tag;
-
+  _parent: Tag;
   _meta: TagMeta = {
     selfClosing: false,
     storesChildren: false,
@@ -56,6 +55,14 @@ export class TagBuilder extends ExFunc {
     this.children.push(...children);
   }
 
+  copy() {
+    const newBuilder = new TagBuilder(this.tagName, ...this.children);
+    newBuilder.attr = this.attr.copy();
+    newBuilder._parent = this._parent;
+    newBuilder._meta = { ...this._meta, ...newBuilder._meta };
+    return newBuilder;
+  }
+
   /** Sets and validates the tag name */
   setTagName(name: string) {
     this.tagName = this.sanitizeTagName(name);
@@ -64,6 +71,7 @@ export class TagBuilder extends ExFunc {
       ...this._meta,
       ...this.getMetaForTag(this.tagName),
     };
+    return this;
   }
 
   /**
@@ -91,13 +99,14 @@ export class TagBuilder extends ExFunc {
 
   /** Attach to the currently attached tag in the global hobo context */
   get a() {
-    return this;
+    return this.copy();
   }
 
   /** Set the parent of the tag. If a parent is set, this tag will be added as a child when built */
   p(parent: Tag) {
-    this._parent = parent;
-    return this;
+    const copy = this.copy();
+    copy._parent = parent;
+    return copy;
   }
 
   /**
@@ -105,14 +114,16 @@ export class TagBuilder extends ExFunc {
    * Can't be empty
    */
   id<T extends string>(newId: T extends '' ? never : T) {
-    this.attr.id = newId;
-    return this;
+    const copy = this.copy();
+    copy.attr.id = newId;
+    return copy;
   }
 
   /** replaces the children of this tag with the provided string */
   text(content: string) {
-    this.children = [content];
-    return this;
+    const copy = this.copy();
+    copy.children = [content];
+    return copy;
   }
 
   /**
@@ -124,20 +135,24 @@ export class TagBuilder extends ExFunc {
       return this;
     }
 
-    this.children.push(...tags.map((c) => (c instanceof TagBuilder ? c.b() : c)));
+    const copy = this.copy();
+    copy.children.push(...tags.map((c) => (c instanceof TagBuilder ? c.b() : c)));
 
-    return this;
+    return copy;
   }
 
   /** Set the children of this tag. Replaces any current children */
   setChildren(children: ValidTagChild[]) {
-    this.children = children;
-    return this;
+    const copy = this.copy();
+    copy.children = children;
+    return copy;
   }
 
   /** Store metadata inside tag. Internal method, you won't need this */
   store(o: any) {
-    this._meta.storage = o;
+    const copy = this.copy();
+    copy._meta.storage = o;
+    return copy;
   }
 
   /**
@@ -160,8 +175,9 @@ export class TagBuilder extends ExFunc {
    * ```
    */
   m(fn: (tag: TagBuilder) => void) {
-    fn(this);
-    return this;
+    const copy = this.copy();
+    fn(copy);
+    return copy;
   }
 
   /**
@@ -180,7 +196,8 @@ export class TagBuilder extends ExFunc {
    * ```
    */
   mc(arg0: (c: ClassName) => void) {
-    return this.m((t) => arg0(t.className));
+    const copy = this.copy();
+    return copy.m((t) => arg0(t.className));
   }
 
   /**
@@ -188,38 +205,43 @@ export class TagBuilder extends ExFunc {
    * Adds classNames to this Tag, and retuns this Tag
    */
   ac(...classNames: string[]) {
-    this.className.add(...classNames);
-    return this;
+    const copy = this.copy();
+    copy.className.add(...classNames);
+    return copy;
   }
 
   /** Add attribute */
   aa(key: string, value: string) {
-    this.attr.set(key, value);
-    return this;
+    const copy = this.copy();
+    copy.attr.set(key, value);
+    return copy;
   }
 
   /** Add multiple atributes at once */
   am(attributes: { [key: string]: string }) {
-    this.attr.additionalAttributes = {
-      ...this.attr.additionalAttributes,
+    const copy = this.copy();
+    copy.attr.additionalAttributes = {
+      ...copy.attr.additionalAttributes,
       ...attributes,
     };
-    return this;
+    return copy;
   }
 
   /** Add style */
   as<T extends CssProperty>(key: T, value: PickPropertyValues<T>) {
-    this.attr.style.set(key, value);
-    return this;
+    const copy = this.copy();
+    copy.attr.style.set(key, value);
+    return copy;
   }
 
   /** Set style as object*/
   ss(styles: StyleMap) {
-    this.attr.style.styles = {
-      ...this.attr.style.styles,
+    const copy = this.copy();
+    copy.attr.style.styles = {
+      ...copy.attr.style.styles,
       ...styles,
     };
-    return this;
+    return copy;
   }
 
   // Utilities
@@ -243,7 +265,7 @@ export class TagBuilder extends ExFunc {
     }
   }
   private sanitizeTagName(tagName: TagName) {
-    return tagName.replace(/[^\w\d]/, '');
+    return tagName.replace(/[^\w\d-_]/, '');
   }
 }
 
@@ -265,7 +287,7 @@ type BuilderFunctions = {
   tag: (tagName: TagName, ...children: ValidTagChild[]) => TagBuilder;
 };
 
-const fns: Partial<BuilderFunctions> = {
+let fns: Partial<BuilderFunctions> = {
   tag: tagBuilder,
 };
 

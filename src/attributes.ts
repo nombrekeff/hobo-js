@@ -8,6 +8,15 @@ export class AttrSet {
 
   additionalAttributes: { [key: string]: string } = {};
 
+  copy() {
+    const newSet = new AttrSet();
+    newSet.className = this.className.copy();
+    newSet.id = this.id;
+    newSet.style = this.style.copy();
+    newSet.additionalAttributes = { ...this.additionalAttributes };
+    return newSet;
+  }
+
   /** Set single attribute */
   set(key: string, value: string): AttrSet {
     this.additionalAttributes[key] = value;

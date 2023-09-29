@@ -4,3 +4,4 @@
 /src/*.html
 /src/*.js
 /src/*.js.map
+/coverage/

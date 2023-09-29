@@ -156,6 +156,21 @@ b.b('And so am I'),
 > )
 > ```
 
+> **NOTE** each time you modify the builder it returns a new TagBuilder instance. 
+> So you can't assign it and then modify, you need to chain. 
+> This is done so hobo can generate new tag builders for each tag without needing to be a function.
+> 
+> This does not work:
+> ```ts 
+> const tag = div.ac('cl');
+> tag.append(p()); // Will not affect `tag`
+> ```
+
+> Instead use chaining:
+> ```ts 
+> const tag = div.ac('cl').append(p());
+> ```
+
 You can set any attribute by using `.aa`, or `.am`:
 ```ts
 a.aa('href', 'http://example.com');

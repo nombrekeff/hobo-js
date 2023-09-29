@@ -4,9 +4,7 @@ import { builders, generate } from '../src/hobo';
 
 const { div, style } = builders;
 
-const root = div;
-
-root.append(
+const root = div.append(
   style(
     {
       body: {

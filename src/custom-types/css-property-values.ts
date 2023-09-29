@@ -45,6 +45,8 @@ export type PickPropertyValues<T> = T extends 'color'
   ? FontStyleOptions
   : T extends 'fontWeight'
   ? FontWeightOptions
+  : T extends 'flexDirection'
+  ? FlexDirectionOptions
   : T extends 'zIndex'
   ? Number
   : T extends 'top'
@@ -195,8 +197,5 @@ export type FontWeightOptions =
   | '800'
   | '900'
   | CommonOptions;
-export type FontStyleOptions =
-  | 'normal'
-  | 'italic'
-  | 'oblique'
-  | CommonOptions;
+export type FontStyleOptions = 'normal' | 'italic' | 'oblique' | CommonOptions;
+export type FlexDirectionOptions = 'row' | 'column' | 'row-reverse' | 'column-reverse' | CommonOptions;

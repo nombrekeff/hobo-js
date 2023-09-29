@@ -9,7 +9,7 @@
     "noImplicitAny": false,
     "lib": ["es2015", "dom"],
     "outDir": "dist",
-    "types": ["node"],
+    "types": ["node", "jest"],
     "declarationDir": "dist/types"
   },
   "exclude": ["./dist/", "./examples/"],

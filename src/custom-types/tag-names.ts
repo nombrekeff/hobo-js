@@ -18,7 +18,6 @@ export const selfClosingTags = [
 export const closingTags = [
   'a',
   'abbr',
-  'abbr',
   'acronym',
   'address',
   'article',
@@ -136,7 +135,6 @@ export const allKnownTags = [
   'wbr',
 
   'a',
-  'abbr',
   'abbr',
   'acronym',
   'address',
