@@ -1,4 +1,4 @@
-## Hobo
+## Hobo.js
 
 Welcome to Hobo. A little utility to generate html inside your js/ts code. Meant as a side-project, but after writing it I thought it might be useful to some people in some scenarios.
 
@@ -7,15 +7,15 @@ Welcome to Hobo. A little utility to generate html inside your js/ts code. Meant
 Install package: 
 
 ```
-npm install <package-name>
+npm install hobo-js
 ```
 
 Then you  can import the package. 
 
 ```ts
-import { builders, generate } from '<package-name>';
+import { builders, generate } from 'hobo-js';
 // Or
-const { builders, generate } = require('<package-name>')
+const { builders, generate } = require('hobo-js')
 ```
 
 I recomend destructuring builders, for a cleaner code:
