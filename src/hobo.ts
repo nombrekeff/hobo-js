@@ -2,7 +2,7 @@
 import { Tag } from './tag';
 import { HtmlGenerator } from './generation/html-generator';
 import { AttachMode, HoboContext, ValidTagChild } from './types/types';
-import { builders, TagBuilder } from './tag-builder';
+import { builders as tagBuilders, TagBuilder } from './tag-builder';
 import { TagName, ValidTagName } from './types/tag-names';
 
 let _context: HoboContext = {
@@ -115,10 +115,10 @@ type BuilderFunctions = {
   tag: (tagName: TagName, ...children: ValidTagChild[]) => TagBuilder;
 };
 
-const exportedTagBuilders: Partial<BuilderFunctions> = {};
+const exportedTagBuilders: BuilderFunctions = {} as BuilderFunctions;
 
-for (let key in builders) {
-  exportedTagBuilders[key] = makeAttachable(builders[key]);
+for (let key in tagBuilders) {
+  exportedTagBuilders[key] = makeAttachable(tagBuilders[key]);
 }
 
 const _generator = new HtmlGenerator();
@@ -127,4 +127,4 @@ export function generate(root: Tag) {
   return _generator.generateHtml(root, _context);
 }
 
-export default exportedTagBuilders;
+export const builders = exportedTagBuilders;

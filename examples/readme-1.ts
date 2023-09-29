@@ -1,6 +1,6 @@
 import path from 'path';
 import * as fs from 'fs';
-import builders, { doc, generate } from '../src/hobo';
+import { builders, doc, generate } from '../src/hobo';
 
 const { div, p, span, b, script, button, style, a } = builders;
 

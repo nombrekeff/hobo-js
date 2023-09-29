@@ -1,4 +1,4 @@
-import builders, { doc } from '../src/hobo';
+import { builders, doc } from '../src/hobo';
 
 const { div, p, span, b } = builders;
 
