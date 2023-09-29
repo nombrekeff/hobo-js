@@ -11,7 +11,10 @@ let _context: HoboContext = {
   globalStuff: [],
 };
 
-/** Creates a HTML document, with a head and body tags */
+/** 
+ * Creates an HTML document, with a head and body tags.
+ * You can pass in the AttachMode to attach to different tags.
+ */
 export function doc(pageTitle: string = 'New Hobo Document', mode: AttachMode = AttachMode.body) {
   const dhead = builders.head(builders.title(pageTitle));
   const dbody = builders.body();
@@ -123,8 +126,12 @@ for (let key in tagBuilders) {
 
 const _generator = new HtmlGenerator();
 
+/** Converts's the Tag tree into a html string */
 export function generate(root: Tag) {
   return _generator.generateHtml(root, _context);
 }
 
+/**
+ * TagBuilders for each known tag. From `div` to `acronym`
+ */
 export const builders = exportedTagBuilders;

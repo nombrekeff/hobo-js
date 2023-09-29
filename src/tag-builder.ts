@@ -4,7 +4,7 @@ import { Tag } from './tag';
 import { CssProperty } from './types/css-properties';
 import { PickPropertyValues } from './types/css-property-values';
 import { TagName, ValidTagName, allKnownTags, selfClosingTags, storableTags } from './types/tag-names';
-import { FindBy, HtmlEventType, StyleMap, TagMeta, ValidTagChild } from './types/types';
+import { HtmlEventType, StyleMap, TagMeta, ValidTagChild } from './types/types';
 import { replaceDoubleQuotes, justFnBody } from './util';
 
 class ExFunc extends Function {
@@ -20,13 +20,19 @@ class ExFunc extends Function {
   __call__(...children: ValidTagChild[]) {}
 }
 
+/**
+ * TagBuilder class, used to build tags of course.
+ */
 export class TagBuilder extends ExFunc {
   tagName: TagName;
   children: ValidTagChild[] = [];
 
+  /** Get the tag className */
   get className() {
     return this.attr.className;
   }
+
+  /** Get the tag id */
   get tagId() {
     return this.attr.id;
   }
@@ -50,6 +56,7 @@ export class TagBuilder extends ExFunc {
     this.children.push(...children);
   }
 
+  /** Sets and validates the tag name */
   setTagName(name: string) {
     this.tagName = this.sanitizeTagName(name);
     this.validateTagName(this.tagName);
@@ -59,13 +66,16 @@ export class TagBuilder extends ExFunc {
     };
   }
 
+  /**
+   * Build the tag with additional children
+   */
   b(...children: ValidTagChild[]) {
     return this.__call__(...children);
   }
 
   __call__(...children: ValidTagChild[]) {
     let tagChildren = [...children, ...this.children];
-    
+
     if (this._meta.storesChildren) {
       this._meta.storage = children;
       tagChildren = [];
@@ -84,34 +94,10 @@ export class TagBuilder extends ExFunc {
     return this;
   }
 
+  /** Set the parent of the tag. If a parent is set, this tag will be added as a child when built */
   p(parent: Tag) {
     this._parent = parent;
     return this;
-  }
-
-  // Utilities
-  private getMetaForTag(tagName: TagName): TagMeta {
-    return {
-      selfClosing: this.isSelfClosingTag(tagName),
-      storesChildren: this.isStorableTag(tagName),
-      storage: null,
-    };
-  }
-
-  private isSelfClosingTag(tagName: string) {
-    return selfClosingTags.includes(tagName);
-  }
-  private isStorableTag(tagName: string) {
-    return storableTags.includes(tagName);
-  }
-  private validateTagName(tagName: TagName) {
-    if (!/[a-zA-Z_][a-z-A-Z0-9_]*/.test(tagName)) {
-      throw new Error(`Invalid tag name "${tagName}"`);
-    }
-  }
-
-  private sanitizeTagName(tagName: TagName) {
-    return tagName.replace(/[^\w\d]/, '');
   }
 
   /**
@@ -129,6 +115,10 @@ export class TagBuilder extends ExFunc {
     return this;
   }
 
+  /**
+   * Adds tags as children if the tag can have children.
+   * For example, if tag is `img` there's no need to add the childre as they will not be generated.
+   */
   append(...tags: ValidTagChild[]) {
     if (this._meta.selfClosing) {
       return;
@@ -138,11 +128,13 @@ export class TagBuilder extends ExFunc {
     return this;
   }
 
+  /** Set the children of this tag. Replaces any current children */
   setChildren(children: ValidTagChild[]) {
     this.children = children;
     return this;
   }
 
+  /** Store metadata inside tag. Internal method, you won't need this */
   store(o: any) {
     this._meta.storage = o;
   }
@@ -172,7 +164,7 @@ export class TagBuilder extends ExFunc {
   }
 
   /**
-   * cm = classname modify
+   * mc = modify classname
    * If the argument is a function
    *
    * Shortcut for modifying the classnames of a tag. Similar to the `.m` method
@@ -180,18 +172,18 @@ export class TagBuilder extends ExFunc {
    *
    * @example
    * ```ts
-   * div([
-   *    p("Child1").c(c => c.add("child-1")),
-   *    p("Child1").c(c => c.add("child-2"))
-   * ])
+   * div(
+   *    p("Child1").mc(c => c.add("child-1")),
+   *    p("Child1").mc(c => c.add("child-2"))
+   * )
    * ```
    */
-  cm(arg0: (c: ClassName) => void) {
+  mc(arg0: (c: ClassName) => void) {
     return this.m((t) => arg0(t.className));
   }
 
   /**
-   * ca = classname add
+   * ac = add classname
    * Adds classNames to this Tag, and retuns this Tag
    */
   ac(...classNames: string[]) {
@@ -229,9 +221,28 @@ export class TagBuilder extends ExFunc {
     return this;
   }
 
-  on(event: HtmlEventType, fn: () => void) {
-    this.attr.set(`on${event}`, replaceDoubleQuotes(justFnBody(fn)));
-    return this;
+  // Utilities
+  private getMetaForTag(tagName: TagName): TagMeta {
+    return {
+      selfClosing: this.isSelfClosingTag(tagName),
+      storesChildren: this.isStorableTag(tagName),
+      storage: null,
+    };
+  }
+
+  private isSelfClosingTag(tagName: string) {
+    return selfClosingTags.includes(tagName);
+  }
+  private isStorableTag(tagName: string) {
+    return storableTags.includes(tagName);
+  }
+  private validateTagName(tagName: TagName) {
+    if (!/[a-zA-Z_][a-z-A-Z0-9_]*/.test(tagName)) {
+      throw new Error(`Invalid tag name "${tagName}"`);
+    }
+  }
+  private sanitizeTagName(tagName: TagName) {
+    return tagName.replace(/[^\w\d]/, '');
   }
 }
 
@@ -243,6 +254,13 @@ const tagNames = allKnownTags;
 type BuilderFunctions = {
   [key in ValidTagName]: ((...children: ValidTagChild[]) => Tag) & TagBuilder;
 } & {
+  /** 
+   * Create a new TagBuilder with specified tagName 
+   * @example
+   * ```ts
+   * tag('uknown-tag');
+   * ```
+   */
   tag: (tagName: TagName, ...children: ValidTagChild[]) => TagBuilder;
 };
 

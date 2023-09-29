@@ -2,13 +2,13 @@ import { TagName } from './types/tag-names';
 import { AttrSet } from './attributes';
 import { FindBy, TagMeta, ValidTagChild } from './types/types';
 
-/**
- * Can throw if the tag name is not valid.
- */
 export class Tag {
   tagName: TagName;
+  
   children: ValidTagChild[] = [];
+  
   attr: AttrSet = new AttrSet();
+
   _meta: TagMeta = {
     selfClosing: false,
     storesChildren: false,
@@ -29,14 +29,17 @@ export class Tag {
     this._meta = meta;
   }
 
+  /** Append children  */
   append(child: ValidTagChild) {
     this.children.push(child);
   }
 
+  /** Find a child by tag name  */
   findByTagName(targetTagName: TagName) {
     return this.findOneBy((t) => t.tagName == targetTagName);
   }
 
+  /** Find a child by custom test  */
   findOneBy(test: FindBy): Tag | null {
     const stack: Tag[] = [];
     stack.push(this);

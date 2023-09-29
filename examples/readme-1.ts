@@ -6,7 +6,7 @@ const { div, p, span, b, script, button, style, a, hr } = builders;
 
 // Create a document. It will create the html, head and body tags. A title will also be added to the head.
 // NOTE that doc, automatically attaches the body (read more on attaching below)
-const myPage = doc();
+const myPage = doc('My Page Title');
 
 // This will create a style tag with the given css definitions inside
 myPage.head.append(

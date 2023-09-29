@@ -27,7 +27,7 @@ const { div, p, span, b, script, button, style, a, hr } = builders;
 ### Demo
 Let me show you a little sample (_I explain everything in detail below_)
 ```ts
-const myPage = doc();
+const myPage = doc('My Page Title');
 
 myPage.head.append(
   style({
@@ -85,13 +85,12 @@ The above snippet would output the following html:
 #### Demo exlanation
 
 ```ts
-const myPage = doc();
+const myPage = doc('My Page Title');
 ```
 
-First of all we create an HTML Page, by calling `doc()`. This will create an HTML, head and body tags. And returns 3 tags, `doc`, `head` and `body`. 
+First of all we create an HTML Page, by calling `doc()`. This will create an HTML, head and body tags. And returns 3 tags, `doc`, `head` and `body`. You can pass in an optional `title`, and `attachMode` arguments.
 
 > It's not required to create a doc, you can start the document with any tag you want.
- 
 > It also "attaches" the `body` tag to the hobo context. This means that you can then automatically add tags to the attached tag without having to use `.append`. I will explain further down.
 > * `doc(mode)`, doc can receive a argument to change the Attach behaviour. You can specify if you want to attach to the body, head or html tags. It will attach to the body by default
 
@@ -193,5 +192,4 @@ Finally generate the html. `generate` returns a string. It's up to you to handle
 > ```ts
 > generate(div(p('Hello'), p('world')));
 > ```
-
 

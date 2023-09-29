@@ -8,6 +8,7 @@ export class HtmlGenerator {
   private cssGenerator = new CssGenerator();
   public beautifyCss = true;
 
+  /** Generate html from the tag provided */
   generateHtml(rootTag: Tag, context?: HoboContext): string {
     let generatedHtml = this._generateTag(rootTag);
     return generatedHtml;
