@@ -8,7 +8,7 @@
   "scripts": {
     "test": "jest --coverage",
     "build": "tsc --doc -p . -d & npm run build:docs",
-    "build:docs": "typedoc --out docs src/**/*.ts"
+    "build:docs": "typedoc --out docs src/*.ts"
   },
   "keywords": [
     "js",
@@ -30,10 +30,7 @@
     "jest": "^29.7.0",
     "jsdoc-to-markdown": "^8.0.0",
     "ts-jest": "^29.1.1",
-    "tsdoc-markdown": "^0.1.0",
+    "typedoc": "^0.25.1",
     "typescript": "^5.2.2"
-  },
-  "dependencies": {
-    "typedoc": "^0.25.1"
   }
 }
