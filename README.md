@@ -1,7 +1,19 @@
 ## Hobo.js
-
+![](./hobo-header.png)
 Welcome to Hobo. A little utility to generate html inside your js/ts code. Meant as a side-project, but after writing it I thought it might be useful to some people in some scenarios.
 
+
+### Who's this for?
+
+I have no idea! I might use it some time. But if you use it, and feel like letting me know, you can either leave a star, contribute or reach out! I would be interested in knowing how it's being used, if at all!
+
+### What does it do?
+
+Well, in essence it allows us to create html documents inside js or ts with ease. If I've not missed anything obvious, I think it's possible to generate any kind of html document. Or maybe other stuff like XML too 🤷🏻‍♂️
+
+You can generate any tag you want. Add **classes**, **ids**, **styles**, and **attributes**. Create **css** and add **scripts**. All of this, with a quite simple api. Might be weird at first, but it's quite intuitive in the end. It even handles self closing tags (void elements) for you. So when creating a **img** tag, it will know it's self closing.
+
+Additionally it's almost fully typed, not only the surface, but into most css property values! IDEs will help autocomplete a lot of stuff! And is extensively tested.
 
 ### Getting Started
 Install package: 
