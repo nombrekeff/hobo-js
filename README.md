@@ -1,9 +1,9 @@
-## Hobo
+## Hobo
 
 Welcome to Hobo. A little utility to generate html inside your js/ts code. Meant as a side-project, but after writing it I thought it might be useful to some people in some scenarios.
 
 
-### Getting Started
+### Getting Started
 Install package: 
 
 ```
@@ -24,7 +24,7 @@ I recomend destructuring builders, for a cleaner code:
 const { div, p, span, b, script, button, style, a, hr } = builders;
 ```
 
-### Demo
+### Demo
 Let me show you a little sample (_I explain everything in detail below_)
 ```ts
 const myPage = doc('My Page Title');
@@ -82,7 +82,7 @@ The above snippet would output the following html:
 </html>
 ```
 
-#### Demo exlanation
+#### Demo exlanation
 
 ```ts
 const myPage = doc('My Page Title');
