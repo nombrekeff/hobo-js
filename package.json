@@ -1,7 +1,7 @@
 {
-  "name": "hobo",
+  "name": "hobo-js",
   "version": "1.0.0",
-  "description": "",
+  "description": "A little utility to generate html inside your js/ts code",
   "main": "./dist/hobo.js",
   "types": "./dist/types/hobo.d.ts",
   "type": "commonjs",
@@ -10,7 +10,18 @@
     "build": "tsc -p . -d",
     "tsdoc": "tsdoc --src=src/hobo.ts --dest=docs/API.md"
   },
-  "keywords": [],
+  "keywords": [
+    "js",
+    "ts",
+    "generate",
+    "html",
+    "from",
+    "code",
+    "typed",
+    "template",
+    "build",
+    "in-code"
+  ],
   "author": "nombrekeff",
   "license": "ISC",
   "devDependencies": {
