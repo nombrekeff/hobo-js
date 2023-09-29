@@ -59,6 +59,10 @@ export class TagBuilder extends ExFunc {
     };
   }
 
+  b(...children: ValidTagChild[]) {
+    return this.__call__(...children);
+  }
+
   __call__(...children: ValidTagChild[]) {
     let tagChildren = [...children, ...this.children];
     
@@ -190,7 +194,7 @@ export class TagBuilder extends ExFunc {
    * ca = classname add
    * Adds classNames to this Tag, and retuns this Tag
    */
-  ca(...classNames: string[]) {
+  ac(...classNames: string[]) {
     this.className.add(...classNames);
     return this;
   }
@@ -211,7 +215,7 @@ export class TagBuilder extends ExFunc {
   }
 
   /** Add style */
-  sa<T extends CssProperty>(key: T, value: PickPropertyValues<T>) {
+  as<T extends CssProperty>(key: T, value: PickPropertyValues<T>) {
     this.attr.style.set(key, value);
     return this;
   }

@@ -2,6 +2,7 @@ import { Tag } from '../tag';
 import { CssGenerator } from './css-generator';
 import { HoboContext } from '../types/types';
 import { justFnBody } from '../util';
+import { TagBuilder } from '../tag-builder';
 
 export class HtmlGenerator {
   private cssGenerator = new CssGenerator();
@@ -26,11 +27,13 @@ export class HtmlGenerator {
     for (const child of tag.children) {
       if (typeof child === 'string') {
         inside += child;
-      } else if (child instanceof Tag) {
+      } 
+      else if (child instanceof Tag) {
         inside += this._generateTag(child) + '\n';
-      } else {
-        throw new Error('Not handled' + child);
-      }
+      } 
+      else if (child instanceof TagBuilder) {
+        inside += this._generateTag(child.b()) + '\n';
+      } 
     }
 
     return this._createTag(tag, inside);
