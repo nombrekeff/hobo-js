@@ -63,6 +63,6 @@ type BuilderFunctions = {
 } & {
     tag: (tagName: TagName, ...children: ValidTagChild[]) => TagBuilder;
 };
-declare const exportedTagBuilders: BuilderFunctions;
 export declare function generate(root: Tag): string;
-export default exportedTagBuilders;
+export declare const builders: BuilderFunctions;
+export {};

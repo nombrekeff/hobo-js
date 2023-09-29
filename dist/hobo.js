@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.generate = exports.detach = exports.attach = exports.doc = void 0;
+exports.builders = exports.generate = exports.detach = exports.attach = exports.doc = void 0;
 const html_generator_1 = require("./generation/html-generator");
 const types_1 = require("./types/types");
 const tag_builder_1 = require("./tag-builder");
@@ -11,9 +11,9 @@ let _context = {
 };
 /** Creates a HTML document, with a head and body tags */
 function doc(pageTitle = 'New Hobo Document', mode = types_1.AttachMode.body) {
-    const dhead = tag_builder_1.builders.head(tag_builder_1.builders.title(pageTitle));
-    const dbody = tag_builder_1.builders.body();
-    const doc = tag_builder_1.builders.html(dhead, dbody);
+    const dhead = exports.builders.head(exports.builders.title(pageTitle));
+    const dbody = exports.builders.body();
+    const doc = exports.builders.html(dhead, dbody);
     switch (mode) {
         case types_1.AttachMode.html:
             attach(doc);
@@ -113,5 +113,5 @@ function generate(root) {
     return _generator.generateHtml(root, _context);
 }
 exports.generate = generate;
-exports.default = exportedTagBuilders;
+exports.builders = exportedTagBuilders;
 //# sourceMappingURL=hobo.js.map
