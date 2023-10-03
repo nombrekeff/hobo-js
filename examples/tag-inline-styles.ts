@@ -7,7 +7,7 @@ const { a } = builders;
 // Add single style
 const root = a
   .as('color', 'bisque')
-  // Add class names directly
+  // Add multiple styles at once
   .ss({ color: 'black', fontWeight: 'bold' });
 
 fs.writeFileSync(path.join(__dirname, 'generated/tag-inline-styles.html'), generate(root.b()));
