@@ -29,7 +29,7 @@ div.a.ac('wrapper').b(
   hr,
   a.aa('href', 'http://example.com').b('Click me'),
   button.id('button-id').b("I'm also a child"),
-);
+)
 
 // The code inside the function will be inserted into a script tag
 script.a(() => {

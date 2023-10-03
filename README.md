@@ -84,7 +84,7 @@ The above snippet would output the following html:
 ```html
 <html>
   <head>
-    <title>New Hobo Document</title>
+    <title>My Page Title</title>
     <style>
       .wrapper {
         background: black;
@@ -95,10 +95,11 @@ The above snippet would output the following html:
     </style>
   </head>
   <body>
-    <div id="button-id" class="wrapper">
+    <div class="wrapper">
       <p>I'm a child of div.wrapper</p>
-      <b>And so am I</b>
-      <button>I'm also a child</button>
+      <b style="color: aliceblue">And so am I</b>
+      <hr />
+      <a href="http://example.com">Click me</a><button id="button-id">I'm also a child</button>
     </div>
     <script>
       const btn = document.querySelector('#button-id');
