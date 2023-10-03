@@ -7,7 +7,7 @@
   "type": "commonjs",
   "scripts": {
     "test": "jest --coverage",
-    "build": "tsc --doc -p . -d & npm run build:docs",
+    "build": "tsc -p . -d & npm run build:docs",
     "build:docs": "typedoc --out docs src/*.ts"
   },
   "keywords": [

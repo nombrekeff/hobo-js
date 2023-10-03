@@ -52,6 +52,8 @@ export declare function doc(pageTitle?: string, mode?: AttachMode): {
  * // remember to call detach when you want to go back to the previous root tag
  * detach();
  * ```
+ *
+ * @param {Tag} tag
  */
 export declare function attach(tag: Tag): void;
 /**

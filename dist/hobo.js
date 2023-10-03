@@ -73,6 +73,8 @@ exports.doc = doc;
  * // remember to call detach when you want to go back to the previous root tag
  * detach();
  * ```
+ *
+ * @param {Tag} tag
  */
 function attach(tag) {
     if (exports._context.attachedTag) {
