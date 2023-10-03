@@ -23,7 +23,7 @@ Additionally it's almost fully typed, not only the surface, but into most css pr
 Install package: 
 
 ```
-npm install hobo-js
+npm install https://github.com/nombrekeff/hobo-js
 ```
 
 Then you  can import the package. 
