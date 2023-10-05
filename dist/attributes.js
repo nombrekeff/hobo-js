@@ -1,15 +1,12 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.AttrSet = void 0;
-const class_name_1 = require("./class-name");
-const style_1 = require("./style");
+import { ClassName } from './class-name';
+import { StyleSet } from './style';
 /**
  * Represents a tag's attribute set.
  */
-class AttrSet {
+export class AttrSet {
     constructor() {
-        this.className = new class_name_1.ClassName();
-        this.style = new style_1.StyleSet();
+        this.className = new ClassName();
+        this.style = new StyleSet();
         this.additionalAttributes = {};
     }
     copy() {
@@ -37,5 +34,4 @@ class AttrSet {
         return key in this.additionalAttributes;
     }
 }
-exports.AttrSet = AttrSet;
 //# sourceMappingURL=attributes.js.map

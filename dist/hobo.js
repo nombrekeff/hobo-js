@@ -1,10 +1,9 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.builders = exports.generate = exports.detach = exports.attach = exports.doc = exports._context = void 0;
-const html_generator_1 = require("./generation/html-generator");
-const types_1 = require("./custom-types/types");
-const tag_builder_1 = require("./tag-builder");
-exports._context = {
+export { Tag } from './tag';
+import { HtmlGenerator } from './generation/html-generator';
+import { AttachMode } from './custom-types/types';
+import { builders as tagBuilders } from './tag-builder';
+export { TagBuilder } from './tag-builder';
+export let _context = {
     attachedTag: null,
     attachedTagStack: [],
     globalStuff: [],
@@ -13,26 +12,27 @@ exports._context = {
  * Creates an HTML document, with a head and body tags.
  * You can pass in the AttachMode to attach to different tags.
  */
-function doc(pageTitle = 'New Hobo Document', mode = types_1.AttachMode.body) {
-    const dhead = exports.builders.head.aa('lang', 'en')(exports.builders.meta.addAttr('charset', 'UTF-8'), exports.builders.meta.setAttr({ name: 'viewport', content: 'width=device-width, initial-scale=1.0' }), exports.builders.title(pageTitle));
-    const dbody = exports.builders.body();
-    const doc = exports.builders.html(dhead, dbody);
+export function doc(pageTitle = 'New Hobo Document', mode = AttachMode.body) {
+    const dhead = builders.head
+        .aa('lang', 'en')
+        .build(builders.meta.addAttr('charset', 'UTF-8'), builders.meta.setAttr({ name: 'viewport', content: 'width=device-width, initial-scale=1.0' }), builders.title(pageTitle));
+    const dbody = builders.body.build();
+    const doc = builders.html.build(dhead, dbody);
     switch (mode) {
-        case types_1.AttachMode.html:
+        case AttachMode.html:
             attach(doc);
             break;
-        case types_1.AttachMode.head:
+        case AttachMode.head:
             attach(doc.findByTagName('head')); // We know there is a head tag
             break;
-        case types_1.AttachMode.body:
+        case AttachMode.body:
             attach(doc.findByTagName('body')); // We know there is a body tag
             break;
-        case types_1.AttachMode.none:
+        case AttachMode.none:
             break;
     }
     return { doc, head: dhead, body: dbody };
 }
-exports.doc = doc;
 /**
  * Attach a given tag to the current context.
  * When you attach a tag, this tag will be the "root" for any tag created without a parent.
@@ -76,31 +76,29 @@ exports.doc = doc;
  *
  * @param {Tag} tag
  */
-function attach(tag) {
-    if (exports._context.attachedTag) {
-        exports._context.attachedTagStack.push(exports._context.attachedTag);
+export function attach(tag) {
+    if (_context.attachedTag) {
+        _context.attachedTagStack.push(_context.attachedTag);
     }
-    exports._context.attachedTag = tag;
+    _context.attachedTag = tag;
 }
-exports.attach = attach;
 /**
  * Detached the currently attached tag, and pops back to the previously attached tag.
  * If there are no stored tags, it will clear the attached tag.
  * You will need to handle the consecuent created tags.
  */
-function detach() {
-    if (exports._context.attachedTagStack.length > 0) {
-        exports._context.attachedTag = exports._context.attachedTagStack.pop();
+export function detach() {
+    if (_context.attachedTagStack.length > 0) {
+        _context.attachedTag = _context.attachedTagStack.pop();
     }
     else {
-        exports._context.attachedTag = null;
+        _context.attachedTag = null;
     }
 }
-exports.detach = detach;
 function makeAttachable(builder) {
     const attachFn = () => {
-        if (exports._context.attachedTag) {
-            return builder.p(exports._context.attachedTag);
+        if (_context.attachedTag) {
+            return builder.p(_context.attachedTag);
         }
         return builder;
     };
@@ -113,17 +111,16 @@ function makeAttachable(builder) {
     return builder;
 }
 const exportedTagBuilders = {};
-for (let key in tag_builder_1.builders) {
-    exportedTagBuilders[key] = makeAttachable(tag_builder_1.builders[key]);
+for (let key in tagBuilders) {
+    exportedTagBuilders[key] = makeAttachable(tagBuilders[key]);
 }
-const _generator = new html_generator_1.HtmlGenerator();
+const _generator = new HtmlGenerator();
 /** Converts's the Tag tree into a html string */
-function generate(root) {
+export function generate(root) {
     return _generator.generateHtml(root);
 }
-exports.generate = generate;
 /**
  * TagBuilders for each known tag. From `div` to `acronym`
  */
-exports.builders = exportedTagBuilders;
+export const builders = exportedTagBuilders;
 //# sourceMappingURL=hobo.js.map

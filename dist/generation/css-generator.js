@@ -1,8 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.CssGenerator = void 0;
-const util_1 = require("../util");
-class CssGenerator {
+import { camelToDash } from '../util';
+export class CssGenerator {
     constructor(beautify = true) {
         this.beautify = beautify;
     }
@@ -18,7 +15,7 @@ class CssGenerator {
     }
     generateBlock(selector, style) {
         let inside = this.generateBlockContent(style);
-        return `${(0, util_1.camelToDash)(selector)} {${inside}}`;
+        return `${camelToDash(selector)} {${inside}}`;
     }
     generateBlockContent(style) {
         let inside = '';
@@ -29,8 +26,7 @@ class CssGenerator {
         return inside;
     }
     generateStyle(name, value) {
-        return `${(0, util_1.camelToDash)(name)}:${value};`;
+        return `${camelToDash(name)}:${value};`;
     }
 }
-exports.CssGenerator = CssGenerator;
 //# sourceMappingURL=css-generator.js.map

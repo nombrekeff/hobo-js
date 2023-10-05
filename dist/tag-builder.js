@@ -1,9 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.builders = exports.TagBuilder = void 0;
-const attributes_1 = require("./attributes");
-const tag_1 = require("./tag");
-const tag_names_1 = require("./custom-types/tag-names");
+import { AttrSet } from './attributes';
+import { Tag } from './tag';
+import { allKnownTags, selfClosingTags, storableTags } from './custom-types/tag-names';
 class ExFunc extends Function {
     constructor() {
         super('...args', 'return this.__self__.__call__(...args)');
@@ -17,7 +14,7 @@ class ExFunc extends Function {
 /**
  * TagBuilder class, used to build tags of course.
  */
-class TagBuilder extends ExFunc {
+export class TagBuilder extends ExFunc {
     /** Get the tag className */
     get className() {
         return this.attr.className;
@@ -32,7 +29,7 @@ class TagBuilder extends ExFunc {
         /**
          * Do not modify directly, use helper methods in the tag instead.
          */
-        this.attr = new attributes_1.AttrSet();
+        this.attr = new AttrSet();
         this._meta = {
             selfClosing: false,
             storesChildren: false,
@@ -74,7 +71,7 @@ class TagBuilder extends ExFunc {
             this._meta.storage = children;
             tagChildren = [];
         }
-        const built = new tag_1.Tag(this.tagName, tagChildren, this.attr, this._meta);
+        const built = new Tag(this.tagName, tagChildren, this.attr, this._meta);
         if (this._parent) {
             this._parent.children.push(built);
         }
@@ -332,10 +329,10 @@ class TagBuilder extends ExFunc {
         };
     }
     isSelfClosingTag(tagName) {
-        return tag_names_1.selfClosingTags.includes(tagName);
+        return selfClosingTags.includes(tagName);
     }
     isStorableTag(tagName) {
-        return tag_names_1.storableTags.includes(tagName);
+        return storableTags.includes(tagName);
     }
     validateTagName(tagName) {
         if (!/[a-zA-Z_][a-z-A-Z0-9_]*/.test(tagName)) {
@@ -346,16 +343,15 @@ class TagBuilder extends ExFunc {
         return tagName.replace(/[^\w\d-_]/, '');
     }
 }
-exports.TagBuilder = TagBuilder;
 function tagBuilder(tagName, ...children) {
     return new TagBuilder(tagName, ...children);
 }
-const tagNames = tag_names_1.allKnownTags;
+const tagNames = allKnownTags;
 let fns = {
     tag: tagBuilder,
 };
 for (let tname of tagNames) {
     fns[tname] = tagBuilder(tname);
 }
-exports.builders = fns;
+export const builders = fns;
 //# sourceMappingURL=tag-builder.js.map

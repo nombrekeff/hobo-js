@@ -1,10 +1,7 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.StyleSet = void 0;
 /**
  * Represents a set of styles
  */
-class StyleSet {
+export class StyleSet {
     constructor() {
         this.styles = {};
     }
@@ -30,5 +27,4 @@ class StyleSet {
         return key in this.styles;
     }
 }
-exports.StyleSet = StyleSet;
 //# sourceMappingURL=style.js.map

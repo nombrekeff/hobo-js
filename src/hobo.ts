@@ -1,8 +1,9 @@
-// import * as fs from 'fs';
 import { Tag } from './tag';
+export { Tag } from './tag';
 import { HtmlGenerator } from './generation/html-generator';
 import { AttachMode, HoboContext, ValidTagChild } from './custom-types/types';
 import { builders as tagBuilders, TagBuilder } from './tag-builder';
+export { TagBuilder } from './tag-builder';
 import { TagName, ValidTagName } from './custom-types/tag-names';
 
 export let _context: HoboContext = {
@@ -16,13 +17,15 @@ export let _context: HoboContext = {
  * You can pass in the AttachMode to attach to different tags.
  */
 export function doc(pageTitle: string = 'New Hobo Document', mode: AttachMode = AttachMode.body) {
-  const dhead = builders.head.aa('lang', 'en')(
-    builders.meta.addAttr('charset', 'UTF-8'),
-    builders.meta.setAttr({ name: 'viewport', content: 'width=device-width, initial-scale=1.0' }),
-    builders.title(pageTitle),
-  );
-  const dbody = builders.body();
-  const doc = builders.html(dhead, dbody);
+  const dhead = builders.head
+    .aa('lang', 'en')
+    .build(
+      builders.meta.addAttr('charset', 'UTF-8'),
+      builders.meta.setAttr({ name: 'viewport', content: 'width=device-width, initial-scale=1.0' }),
+      builders.title(pageTitle),
+    );
+  const dbody = builders.body.build();
+  const doc = builders.html.build(dhead, dbody);
 
   switch (mode) {
     case AttachMode.html:

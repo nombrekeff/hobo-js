@@ -1,12 +1,9 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Tag = void 0;
-const attributes_1 = require("./attributes");
-const tag_builder_1 = require("./tag-builder");
+import { AttrSet } from './attributes';
+import { TagBuilder } from './tag-builder';
 /**
  * Represents an html tag
  */
-class Tag {
+export class Tag {
     get className() {
         return this.attr.className;
     }
@@ -15,7 +12,7 @@ class Tag {
     }
     constructor(tagName, children, attr, meta) {
         this.children = [];
-        this.attr = new attributes_1.AttrSet();
+        this.attr = new AttrSet();
         this._meta = {
             selfClosing: false,
             storesChildren: false,
@@ -28,7 +25,7 @@ class Tag {
     }
     /** Append children  */
     append(child) {
-        if (child instanceof tag_builder_1.TagBuilder)
+        if (child instanceof TagBuilder)
             child = child.b();
         this.children.push(child);
     }
@@ -56,5 +53,4 @@ class Tag {
         return null;
     }
 }
-exports.Tag = Tag;
 //# sourceMappingURL=tag.js.map

@@ -1,6 +1,8 @@
 import { Tag } from './tag';
+export { Tag } from './tag';
 import { AttachMode, HoboContext, ValidTagChild } from './custom-types/types';
 import { TagBuilder } from './tag-builder';
+export { TagBuilder } from './tag-builder';
 import { TagName, ValidTagName } from './custom-types/tag-names';
 export declare let _context: HoboContext;
 /**
@@ -9,7 +11,7 @@ export declare let _context: HoboContext;
  */
 export declare function doc(pageTitle?: string, mode?: AttachMode): {
     doc: Tag;
-    head: any;
+    head: Tag;
     body: Tag;
 };
 /**
@@ -75,4 +77,3 @@ export declare function generate(root: Tag): string;
  * TagBuilders for each known tag. From `div` to `acronym`
  */
 export declare const builders: BuilderFunctions;
-export {};

@@ -1,13 +1,10 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.HtmlGenerator = void 0;
-const tag_1 = require("../tag");
-const css_generator_1 = require("./css-generator");
-const util_1 = require("../util");
-const tag_builder_1 = require("../tag-builder");
-class HtmlGenerator {
+import { Tag } from '../tag';
+import { CssGenerator } from './css-generator';
+import { justFnBody } from '../util';
+import { TagBuilder } from '../tag-builder';
+export class HtmlGenerator {
     constructor() {
-        this.cssGenerator = new css_generator_1.CssGenerator();
+        this.cssGenerator = new CssGenerator();
         this.beautifyCss = true;
     }
     /** Generate html from the tag provided */
@@ -25,10 +22,10 @@ class HtmlGenerator {
         let inside = '';
         for (const child of tag.children) {
             let effectiveChild = child;
-            if (child instanceof tag_builder_1.TagBuilder) {
+            if (child instanceof TagBuilder) {
                 effectiveChild = child.b();
             }
-            if (effectiveChild instanceof tag_1.Tag) {
+            if (effectiveChild instanceof Tag) {
                 inside += this._generateTag(effectiveChild);
             }
             else {
@@ -64,7 +61,7 @@ class HtmlGenerator {
     _generateScriptContent(storage) {
         let scriptContent = '';
         if (storage instanceof Function) {
-            scriptContent += (0, util_1.justFnBody)(storage);
+            scriptContent += justFnBody(storage);
         }
         else if (storage instanceof Array) {
             for (const fn of storage) {
@@ -79,5 +76,4 @@ class HtmlGenerator {
         return `${name}="${value}"`;
     }
 }
-exports.HtmlGenerator = HtmlGenerator;
 //# sourceMappingURL=html-generator.js.map

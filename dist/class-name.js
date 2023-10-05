@@ -1,10 +1,7 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ClassName = void 0;
 /**
  * Represents a tag's class list.
  */
-class ClassName {
+export class ClassName {
     constructor(classNames = []) {
         this.classNames = [];
         this.classNames = classNames;
@@ -44,5 +41,4 @@ class ClassName {
         return this.classNames.includes(str);
     }
 }
-exports.ClassName = ClassName;
 //# sourceMappingURL=class-name.js.map
