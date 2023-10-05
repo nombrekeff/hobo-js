@@ -31,12 +31,19 @@ export declare class TagBuilder extends ExFunc {
     /** Sets and validates the tag name */
     setTagName(name: string): this;
     /**
+     * Shorthand for `.build` method
      * Build the tag with additional children
      */
     b(...children: ValidTagChild[]): Tag;
+    /**
+     * Build the tag with additional children
+     */
+    build(...children: ValidTagChild[]): Tag;
     __call__(...children: ValidTagChild[]): Tag;
     /** Attach to the currently attached tag in the global hobo context */
     get a(): TagBuilder;
+    /** Same as .a - Attach to the currently attached tag in the global hobo context */
+    get attach(): TagBuilder;
     /** Set the parent of the tag. If a parent is set, this tag will be added as a child when built */
     p(parent: Tag): TagBuilder;
     /**
@@ -76,10 +83,35 @@ export declare class TagBuilder extends ExFunc {
      */
     m(fn: (tag: TagBuilder) => void): TagBuilder;
     /**
-     * mc = modify classname
-     * If the argument is a function
+     * calls `fn` with the tag, and returns the tag
      *
-     * Shortcut for modifying the classnames of a tag. Similar to the `.m` method
+     * usefull to change a tag while maintaing chaning
+     *
+     * @example
+     * ```ts
+     * div().m(t => t.className.add("Container"))
+     *    .div("I'm a child!"),
+     * ```
+     * @example
+     * ```ts
+     * div([
+     *    p("Child1").mod(t => t.className.add("child-1")),
+     *    p("Child1").mod(t => t.className.add("child-2"))
+     * ])
+     * ```
+     */
+    mod(fn: (tag: TagBuilder) => void): TagBuilder;
+    /**
+     * Shortcut for method .modClass
+     *
+     * Modifies the classnames of a tag. Similar to the `.mod` or `.m` methods
+     * but it passes the className instead of the complete tag.
+     *
+     * Retuns a new TagBuilder
+     */
+    mc(arg0: (c: ClassName) => void): TagBuilder;
+    /**
+     * Modifies the classnames of a tag. Similar to the `.mod` or `.m` methods
      * but it passes the className instead of the complete tag.
      *
      * Retuns a new TagBuilder
@@ -87,42 +119,82 @@ export declare class TagBuilder extends ExFunc {
      * @example
      * ```ts
      * div(
-     *    p("Child1").mc(c => c.add("child-1")),
-     *    p("Child1").mc(c => c.add("child-2"))
+     *    p("Child1").modClass(c => c.add("child-1")),
+     *    p("Child1").modClass(c => c.add("child-2"))
      * )
      * ```
      */
-    mc(arg0: (c: ClassName) => void): TagBuilder;
+    modClass(arg0: (c: ClassName) => void): TagBuilder;
     /**
-     * ac = add classname
+     * Shorthand for .addClass method.
      * Adds classNames to this TagBuilder, and returns a new TagBuilder
      */
     ac(...classNames: string[]): TagBuilder;
     /**
-     * rc = remove classname
+     * Adds classNames to this TagBuilder, and returns a new TagBuilder
+     */
+    addClass(...classNames: string[]): TagBuilder;
+    /**
+     * Shorthand for .rmClass method.
      * Removes classNames from this TagBuilder, and returns a new TagBuilder
      */
     rc(...classNames: string[]): TagBuilder;
-    /** Adds attribute, and returns a new TagBuilder */
+    /**
+     * Removes classNames from this TagBuilder, and returns a new TagBuilder
+     */
+    rmClass(...classNames: string[]): TagBuilder;
+    /**
+     * Shorthand for .addAttr method.
+     * Adds attribute, and returns a new TagBuilder
+     */
     aa(key: string, value: string): TagBuilder;
-    /** Adds multiple atributes at once, and returns a new TagBuilder*/
-    am(attributes: {
+    /** Add one attribute, and return a new TagBuilder */
+    addAttr(key: string, value: string): TagBuilder;
+    /**
+     * Shorthand for .setAttr method.
+     * Sets multiple atributes at once, and returns a new TagBuilder
+     */
+    sa(attributes: {
+        [key: string]: string;
+    }): TagBuilder;
+    /** Sets multiple atributes at once, and returns a new TagBuilder */
+    setAttr(attributes: {
         [key: string]: string;
     }): TagBuilder;
     /**
-     * ra = remove attribute
+     * Shorthand for .removeAttr method.
      * Removes attribute from this TagBuilder, and returns a new TagBuilder
      */
     ra(...attr: string[]): TagBuilder;
-    /** Adds style, and returns a new TagBuilder*/
-    as<T extends CssProperty>(key: T, value: PickPropertyValues<T>): TagBuilder;
-    /** Adds style from object, and returns a new TagBuilder */
-    ss(styles: StyleMap): TagBuilder;
     /**
-     * rs = remove styles
+     * Removes attribute from this TagBuilder, and returns a new TagBuilder
+     */
+    rmAttr(...attr: string[]): TagBuilder;
+    /**
+     * Shorthand for .addStyle method
+     * Adds a single style, and returns a new TagBuilder
+     */
+    as<T extends CssProperty>(key: T, value: PickPropertyValues<T>): TagBuilder;
+    /**
+     * Adds a single style, and returns a new TagBuilder
+     */
+    addStyle<T extends CssProperty>(key: T, value: PickPropertyValues<T>): TagBuilder;
+    /**
+     * Shorthand for .setStyles method.
+     * Adds style from object, and returns a new TagBuilder
+     */
+    ss(styles: StyleMap): TagBuilder;
+    /** Adds style from object, and returns a new TagBuilder */
+    setStyles(styles: StyleMap): TagBuilder;
+    /**
+     * Shorthand for .removeStyles method.
      * Removes styles from this TagBuilder, and returns a new TagBuilder
      */
     rs(...styleNames: string[]): TagBuilder;
+    /**
+     * Removes styles from this TagBuilder, and returns a new TagBuilder
+     */
+    rmStyle(...styleNames: string[]): TagBuilder;
     private getMetaForTag;
     private isSelfClosingTag;
     private isStorableTag;

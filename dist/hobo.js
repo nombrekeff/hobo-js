@@ -98,13 +98,17 @@ function detach() {
 }
 exports.detach = detach;
 function makeAttachable(builder) {
+    const attachFn = () => {
+        if (exports._context.attachedTag) {
+            return builder.p(exports._context.attachedTag);
+        }
+        return builder;
+    };
     Object.defineProperty(builder, 'a', {
-        get: () => {
-            if (exports._context.attachedTag) {
-                return builder.p(exports._context.attachedTag);
-            }
-            return builder;
-        },
+        get: attachFn,
+    });
+    Object.defineProperty(builder, 'attach', {
+        get: attachFn,
     });
     return builder;
 }
