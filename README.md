@@ -65,7 +65,7 @@ myPage.head.append(
   }, {/* more style objects */}),
 );
 
-div.a.ac('wrapper').build(
+div.attach.ac('wrapper').build(
   p("I'm a child of div.wrapper"),
   b.addStyle('color', 'aliceblue')('And so am I'),
   hr,
@@ -114,7 +114,7 @@ The above snippet would output the following html:
 const myPage = doc('My Page Title');
 ```
 
-First of all we create an HTML Page, by calling `doc()`. This will create an HTML, head and body tags. And returns 3 tags, `doc`, `head` and `body`. You can pass in an optional `title`, and `attachMode` arguments.
+First of all we create an HTML Page, by calling `doc()`. This will create an HTML, head and body tags. And returns 3 tags, `doc`, `head` and `body`. You can pass in an optional `title`, and `attachMode` arguments (_look at the [Attaching](#attaching) section for more info_).
 
 > It's not required to create a doc, you can start the document with any tag you want.
 > It also "attaches" the `body` tag to the hobo context. This means that you can then automatically add tags to the attached tag without having to use `.append`. I will explain further down.
@@ -153,7 +153,8 @@ div.a.ac('wrapper').build(
 );
 ```
 
-In the step above step, we create the html that will be inside the `body`. As you can see instead of calling `.append` in the body tag like with the style, we just use `.a` to attach to the current hobo context's attached tag (_which will be the body tag_)
+In the step above step, we create the html that will be inside the `body`. As you can see instead of calling `.append` in the body tag like with the style.
+`.a` and `.attach` are used to [attach](#attaching) to the current hobo context's attached tag (_which will be the body tag in the example_)
 
 Then we set the tag's class name by calling `.ac` (you can also use `.addClass()`), this will set the class wrapper to the div (`<div class="wrapper"></div>`)
 
@@ -238,3 +239,41 @@ Finally generate the html. `generate` returns a string. It's up to you to handle
 > generate(div(p('Hello'), p('world')));
 > ```
 
+
+### Attaching
+
+by calling `attach` on a tag, it makes it so that you don't need to manually add children to a tag:
+
+```ts
+const root = div.build("I'm the root tag");
+
+attach(root);
+div.a;
+div.attach;
+p.attach;
+```
+
+> Any tag that calls `.a` or `.attach` will be added as children of the root div.
+
+You can also attach multiple times:
+```ts
+const root = div.build("I'm the root tag");
+
+attach(root);
+div.a;
+const child = div.attach.addClass('child-wrapper');
+
+attach(child);
+p.a("I'm a child of child-wrapper");
+p.a("And so am I");
+detach();
+
+p.a("I'm now a child of root div again");
+detach();
+
+p.a("I'm now not attached as there are no attached tags");
+```
+
+By calling attach the last tag is attached to, then by calling detach, the previously attached tag is now attached. Note that if you call attach and there's only 1 tag attached, it will detach that also. So consequent tags that try to attach will not attach as there's no tag attached.
+
+When calling `doc()`, it will automatically attach to the body. Although you can specify the tag you want to attach to by passing the attachMode argument.
