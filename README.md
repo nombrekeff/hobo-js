@@ -65,11 +65,11 @@ myPage.head.append(
   }, {/* more style objects */}),
 );
 
-div.a.ac('wrapper').b(
+div.a.ac('wrapper').build(
   p("I'm a child of div.wrapper"),
-  b.as('color', 'aliceblue')('And so am I'),
+  b.addStyle('color', 'aliceblue')('And so am I'),
   hr,
-  a.aa('href', 'http://example.com').b('Click me'),
+  a.addAttr('href', 'http://example.com').b('Click me'),
   button.id('button-id').b("I'm also a child"),
 );
 
@@ -144,20 +144,20 @@ The following adds a style tag to the `head` tag. The style tag accepts objects 
 ----
 
 ```ts
-div.a.ca('wrapper').b(
+div.a.ac('wrapper').build(
   p("I'm a child of div.wrapper"),
-  b.b('And so am I'),
+  b.addStyle('color', 'aliceblue')('And so am I'),
   hr,
-  a.aa('href', 'http://example.com').b('Click me'),
+  a.addAttr('href', 'http://example.com').b('Click me'),
   button.id('button-id').b("I'm also a child"),
 );
 ```
 
 In the step above step, we create the html that will be inside the `body`. As you can see instead of calling `.append` in the body tag like with the style, we just use `.a` to attach to the current hobo context's attached tag (_which will be the body tag_)
 
-Then we set the tag's class name by calling `.ca`, this will set the class wrapper to the div (`<div class="wrapper"></div>`)
+Then we set the tag's class name by calling `.ac` (you can also use `.addClass()`), this will set the class wrapper to the div (`<div class="wrapper"></div>`)
 
-After that we build the tag by calling `.b`, and pass in a list of child tags.
+After that we build the tag by calling `.b` (or `.build()`, or you can also just call the builder `div()`), and pass in a list of children.
 
 Hobo uses the builder pattern to ease the creation of tags. A tag can be built by, either calling the builder directly:
 ```ts
@@ -165,14 +165,14 @@ p("I'm a child of div.wrapper");
 ```
 or by calling the `.b` method:
 ```ts
-b.b('And so am I'),
+b.build('And so am I'),
 ```
 
 > NOTE that it's not required to build the tag if you don't need to pass children to it:
 > ```ts 
 > div(
 >   hr,
->   div.ca('white-box'), 
+>   div.addClass('white-box'), 
 > )
 > ```
 
@@ -182,7 +182,7 @@ b.b('And so am I'),
 > 
 > This does not work:
 > ```ts 
-> const tag = div.ac('cl');
+> const tag = div.ac('cl'); // .ac is shorthand for addClass
 > tag.append(p()); // Will not affect `tag`
 > ```
 
@@ -193,15 +193,19 @@ b.b('And so am I'),
 
 You can set any attribute by using `.aa`, or `.am`:
 ```ts
+a.addAttr('href', 'http://example.com');
 a.aa('href', 'http://example.com');
-a.am({ 'href': 'http://example.com' });
+a.setAttr({ 'href': 'http://example.com' });
+a.sa({ 'href': 'http://example.com' });
 ```
 
 ----
 
 ```ts
+p.addStyle('color', 'aliceblue');
 p.as('color', 'aliceblue');
-p.as({ 'color': 'aliceblue' });
+p.setStyle({ 'color': 'aliceblue' });
+p.ss({ 'color': 'aliceblue' });
 ```
 Tags can also have inline styles. You can add a single style by using the add style (`.as`) method, or add multiple at once by using the set styles (`.ss`) method.
 

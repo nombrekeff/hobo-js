@@ -23,13 +23,13 @@ myPage.head.append(
 // Creates a `div` with class wrapper, and 3 children (p, b, button).
 // `.a` indicates hobo to attach the `div` to the currently attached tag
 // you can attach manually to any tag, but by calling `doc`, the `body` will be attached
-div.a.ac('wrapper').b(
+div.a.addClass('wrapper').build(
   p("I'm a child of div.wrapper"),
-  b.as('color', 'aliceblue')('And so am I'),
+  b.addStyle('color', 'aliceblue')('And so am I'),
   hr,
-  a.aa('href', 'http://example.com').b('Click me'),
+  a.addAttr('href', 'http://example.com').b('Click me'),
   button.id('button-id').b("I'm also a child"),
-)
+);
 
 // The code inside the function will be inserted into a script tag
 script.a(() => {

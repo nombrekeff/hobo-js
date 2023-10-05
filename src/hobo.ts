@@ -100,14 +100,20 @@ export function detach() {
   }
 }
 
-function makeAttachable(builder: TagBuilder): TagBuilder & { a: TagBuilder } {
+function makeAttachable(builder: TagBuilder): TagBuilder & { a: TagBuilder, attach: TagBuilder } {
+  const attachFn = () => {
+    if (_context.attachedTag) {
+      return builder.p(_context.attachedTag);
+    }
+    return builder;
+  };
+
   Object.defineProperty(builder, 'a', {
-    get: () => {
-      if (_context.attachedTag) {
-        return builder.p(_context.attachedTag);
-      }
-      return builder;
-    },
+    get: attachFn,
+  });
+
+  Object.defineProperty(builder, 'attach', {
+    get: attachFn,
   });
 
   return builder;

@@ -75,9 +75,17 @@ export class TagBuilder extends ExFunc {
   }
 
   /**
+   * Shorthand for `.build` method
    * Build the tag with additional children
    */
   b(...children: ValidTagChild[]): Tag {
+    return this.build(...children);
+  }
+
+  /**
+   * Build the tag with additional children
+   */
+  build(...children: ValidTagChild[]): Tag {
     return this.__call__(...children);
   }
 
@@ -100,6 +108,12 @@ export class TagBuilder extends ExFunc {
   /** Attach to the currently attached tag in the global hobo context */
   /* istanbul ignore next */
   get a() {
+    return this.copy();
+  }
+
+  /** Same as .a - Attach to the currently attached tag in the global hobo context */
+  /* istanbul ignore next */
+  get attach() {
     return this.copy();
   }
 
@@ -176,16 +190,47 @@ export class TagBuilder extends ExFunc {
    * ```
    */
   m(fn: (tag: TagBuilder) => void) {
+    return this.mod(fn);
+  }
+
+  /**
+   * calls `fn` with the tag, and returns the tag
+   *
+   * usefull to change a tag while maintaing chaning
+   *
+   * @example
+   * ```ts
+   * div().m(t => t.className.add("Container"))
+   *    .div("I'm a child!"),
+   * ```
+   * @example
+   * ```ts
+   * div([
+   *    p("Child1").mod(t => t.className.add("child-1")),
+   *    p("Child1").mod(t => t.className.add("child-2"))
+   * ])
+   * ```
+   */
+  mod(fn: (tag: TagBuilder) => void) {
     const copy = this.copy();
     fn(copy);
     return copy;
   }
 
   /**
-   * mc = modify classname
-   * If the argument is a function
+   * Shortcut for method .modClass
    *
-   * Shortcut for modifying the classnames of a tag. Similar to the `.m` method
+   * Modifies the classnames of a tag. Similar to the `.mod` or `.m` methods
+   * but it passes the className instead of the complete tag.
+   *
+   * Retuns a new TagBuilder
+   */
+  mc(arg0: (c: ClassName) => void) {
+    return this.modClass(arg0);
+  }
+
+  /**
+   * Modifies the classnames of a tag. Similar to the `.mod` or `.m` methods
    * but it passes the className instead of the complete tag.
    *
    * Retuns a new TagBuilder
@@ -193,45 +238,75 @@ export class TagBuilder extends ExFunc {
    * @example
    * ```ts
    * div(
-   *    p("Child1").mc(c => c.add("child-1")),
-   *    p("Child1").mc(c => c.add("child-2"))
+   *    p("Child1").modClass(c => c.add("child-1")),
+   *    p("Child1").modClass(c => c.add("child-2"))
    * )
    * ```
    */
-  mc(arg0: (c: ClassName) => void) {
+  modClass(arg0: (c: ClassName) => void) {
     const copy = this.copy();
     return copy.m((t) => arg0(t.className));
   }
 
   /**
-   * ac = add classname
+   * Shorthand for .addClass method.
    * Adds classNames to this TagBuilder, and returns a new TagBuilder
    */
   ac(...classNames: string[]) {
+    return this.addClass(...classNames);
+  }
+
+  /**
+   * Adds classNames to this TagBuilder, and returns a new TagBuilder
+   */
+  addClass(...classNames: string[]) {
     const copy = this.copy();
     copy.className.add(...classNames);
     return copy;
   }
 
   /**
-   * rc = remove classname
+   * Shorthand for .rmClass method.
    * Removes classNames from this TagBuilder, and returns a new TagBuilder
    */
   rc(...classNames: string[]) {
+    return this.rmClass(...classNames);
+  }
+
+  /**
+   * Removes classNames from this TagBuilder, and returns a new TagBuilder
+   */
+  rmClass(...classNames: string[]) {
     const copy = this.copy();
     copy.className.remove(...classNames);
     return copy;
   }
 
-  /** Adds attribute, and returns a new TagBuilder */
+  /**
+   * Shorthand for .addAttr method.
+   * Adds attribute, and returns a new TagBuilder
+   */
   aa(key: string, value: string) {
+    return this.addAttr(key, value);
+  }
+
+  /** Add one attribute, and return a new TagBuilder */
+  addAttr(key: string, value: string) {
     const copy = this.copy();
     copy.attr.set(key, value);
     return copy;
   }
 
-  /** Adds multiple atributes at once, and returns a new TagBuilder*/
-  am(attributes: { [key: string]: string }) {
+  /**
+   * Shorthand for .setAttr method.
+   * Sets multiple atributes at once, and returns a new TagBuilder
+   */
+  sa(attributes: { [key: string]: string }) {
+    return this.setAttr(attributes);
+  }
+
+  /** Sets multiple atributes at once, and returns a new TagBuilder */
+  setAttr(attributes: { [key: string]: string }) {
     const copy = this.copy();
     copy.attr.additionalAttributes = {
       ...copy.attr.additionalAttributes,
@@ -241,24 +316,49 @@ export class TagBuilder extends ExFunc {
   }
 
   /**
-   * ra = remove attribute
+   * Shorthand for .removeAttr method.
    * Removes attribute from this TagBuilder, and returns a new TagBuilder
    */
   ra(...attr: string[]) {
+    return this.rmAttr(...attr);
+  }
+
+  /**
+   * Removes attribute from this TagBuilder, and returns a new TagBuilder
+   */
+  rmAttr(...attr: string[]) {
     const copy = this.copy();
     copy.attr.remove(...attr);
     return copy;
   }
 
-  /** Adds style, and returns a new TagBuilder*/
+  /**
+   * Shorthand for .addStyle method
+   * Adds a single style, and returns a new TagBuilder
+   */
   as<T extends CssProperty>(key: T, value: PickPropertyValues<T>) {
+    return this.addStyle(key, value);
+  }
+
+  /**
+   * Adds a single style, and returns a new TagBuilder
+   */
+  addStyle<T extends CssProperty>(key: T, value: PickPropertyValues<T>) {
     const copy = this.copy();
     copy.attr.style.set(key, value);
     return copy;
   }
 
-  /** Adds style from object, and returns a new TagBuilder */
+  /**
+   * Shorthand for .setStyles method.
+   * Adds style from object, and returns a new TagBuilder
+   */
   ss(styles: StyleMap) {
+    return this.setStyles(styles);
+  }
+
+  /** Adds style from object, and returns a new TagBuilder */
+  setStyles(styles: StyleMap) {
     const copy = this.copy();
     copy.attr.style.styles = {
       ...copy.attr.style.styles,
@@ -268,10 +368,17 @@ export class TagBuilder extends ExFunc {
   }
 
   /**
-   * rs = remove styles
+   * Shorthand for .removeStyles method.
    * Removes styles from this TagBuilder, and returns a new TagBuilder
    */
   rs(...styleNames: string[]) {
+    return this.rmStyle(...styleNames);
+  }
+
+  /**
+   * Removes styles from this TagBuilder, and returns a new TagBuilder
+   */
+  rmStyle(...styleNames: string[]) {
     const copy = this.copy();
     copy.attr.style.remove(...styleNames);
     return copy;
@@ -326,13 +433,6 @@ let fns: Partial<BuilderFunctions> = {
 
 for (let tname of tagNames) {
   fns[tname] = tagBuilder(tname);
-  // Object.defineProperty(fns, tname, {
-  //   enumerable: true,
-  //   get(): TagBuilder {
-  //     console.log('get');
-  //     return tagBuilder(tname);
-  //   },
-  // });
 }
 
 export const builders = fns;

@@ -52,7 +52,7 @@ describe('TagBuilder', () => {
   });
 
   it('.a returns builder', async () => {
-    const someTag = tagBuilders.div.a;
+    const someTag = (tagBuilders.div as TagBuilder).a;
     expect(someTag).toBeInstanceOf(TagBuilder);
   });
 
@@ -130,7 +130,7 @@ describe('TagBuilder', () => {
   });
 
   it('.am works', async () => {
-    const el = builders.div.am({ one: 'two' }).b();
+    const el = builders.div.sa({ one: 'two' }).b();
     expect('one' in el.attr.additionalAttributes).toEqual(true);
     expect(el.attr.additionalAttributes['one']).toEqual('two');
   });
