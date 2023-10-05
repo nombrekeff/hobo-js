@@ -16,7 +16,11 @@ export let _context: HoboContext = {
  * You can pass in the AttachMode to attach to different tags.
  */
 export function doc(pageTitle: string = 'New Hobo Document', mode: AttachMode = AttachMode.body) {
-  const dhead = builders.head(builders.title(pageTitle));
+  const dhead = builders.head.aa('lang', 'en')(
+    builders.meta.addAttr('charset', 'UTF-8'),
+    builders.meta.setAttr({ name: 'viewport', content: 'width=device-width, initial-scale=1.0' }),
+    builders.title(pageTitle),
+  );
   const dbody = builders.body();
   const doc = builders.html(dhead, dbody);
 
@@ -77,7 +81,7 @@ export function doc(pageTitle: string = 'New Hobo Document', mode: AttachMode = 
  * // remember to call detach when you want to go back to the previous root tag
  * detach();
  * ```
- * 
+ *
  * @param {Tag} tag
  */
 export function attach(tag: Tag) {
@@ -100,7 +104,7 @@ export function detach() {
   }
 }
 
-function makeAttachable(builder: TagBuilder): TagBuilder & { a: TagBuilder, attach: TagBuilder } {
+function makeAttachable(builder: TagBuilder): TagBuilder & { a: TagBuilder; attach: TagBuilder } {
   const attachFn = () => {
     if (_context.attachedTag) {
       return builder.p(_context.attachedTag);

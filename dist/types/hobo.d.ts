@@ -9,7 +9,7 @@ export declare let _context: HoboContext;
  */
 export declare function doc(pageTitle?: string, mode?: AttachMode): {
     doc: Tag;
-    head: Tag;
+    head: any;
     body: Tag;
 };
 /**

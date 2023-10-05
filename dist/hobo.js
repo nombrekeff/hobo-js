@@ -14,7 +14,7 @@ exports._context = {
  * You can pass in the AttachMode to attach to different tags.
  */
 function doc(pageTitle = 'New Hobo Document', mode = types_1.AttachMode.body) {
-    const dhead = exports.builders.head(exports.builders.title(pageTitle));
+    const dhead = exports.builders.head.aa('lang', 'en')(exports.builders.meta.addAttr('charset', 'UTF-8'), exports.builders.meta.setAttr({ name: 'viewport', content: 'width=device-width, initial-scale=1.0' }), exports.builders.title(pageTitle));
     const dbody = exports.builders.body();
     const doc = exports.builders.html(dhead, dbody);
     switch (mode) {
