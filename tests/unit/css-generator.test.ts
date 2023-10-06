@@ -5,18 +5,29 @@ describe('CssGenerator', () => {
 
   it('generateCss() basic works', async () => {
     const generated = generator.generateCss({
-        'body': {},
+      body: {},
     });
-    expect(generated).toEqual('body {}')
+    expect(generated).toEqual('body{}');
   });
 
   it('generateCss() with styles', async () => {
     const generated = generator.generateCss({
-        'body': {
-            color: 'red',
-            flexDirection: 'column',
-        },
+      body: {
+        color: 'red',
+        flexDirection: 'column',
+      },
     });
-    expect(generated).toEqual('body {color:red;flex-direction:column;}')
+    expect(generated).toEqual('body{color:red;flex-direction:column;}');
+  });
+
+  it('generateCss() with nested styles', async () => {
+    const generated = generator.generateCss({
+      body: {
+        color: 'red',
+        flexDirection: 'column',
+        ':hover': { color: 'blue' },
+      },
+    });
+    expect(generated).toEqual('body{color:red;flex-direction:column;}body:hover{color:blue;}');
   });
 });

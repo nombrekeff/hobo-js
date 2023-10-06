@@ -4,7 +4,7 @@ import { Tag } from './tag';
 import { CssProperty } from './custom-types/css-properties';
 import { PickPropertyValues } from './custom-types/css-property-values';
 import { TagName, ValidTagName, allKnownTags, selfClosingTags, storableTags } from './custom-types/tag-names';
-import { StyleMap, TagMeta, ValidTagChild } from './custom-types/types';
+import { StyleMap, StyleSet, TagMeta, ValidTagChild } from './custom-types/types';
 
 class ExFunc extends Function {
   private __self__: any;
@@ -414,8 +414,10 @@ function tagBuilder(tagName: TagName, ...children: ValidTagChild[]): TagBuilder 
 }
 const tagNames = allKnownTags;
 
+export type PickArgType<T> = T extends 'style' ? StyleSet[] : ValidTagChild[];
+
 type BuilderFunctions = {
-  [key in ValidTagName]: ((...children: ValidTagChild[]) => Tag) & TagBuilder;
+  [key in ValidTagName]: ((...children: PickArgType<key>) => Tag) & TagBuilder;
 } & {
   /**
    * Create a new TagBuilder with specified tagName
@@ -424,7 +426,7 @@ type BuilderFunctions = {
    * tag('uknown-tag');
    * ```
    */
-  tag: (tagName: TagName, ...children: ValidTagChild[]) => TagBuilder;
+  tag: (tagName: TagName, ...children: PickArgType<typeof tagName>) => TagBuilder;
 };
 
 let fns: Partial<BuilderFunctions> = {

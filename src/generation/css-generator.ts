@@ -1,15 +1,8 @@
-// import cssbeautify from 'cssbeautify';
-import { StyleMap } from '../custom-types/types';
-import { camelToDash } from '../util';
+import { NestedStyleMap, StyleMap } from '../custom-types/types';
+import { camelToDash, isObject } from '../util';
 
 export class CssGenerator {
-  beautify: boolean;
-
-  constructor(beautify: boolean = true) {
-    this.beautify = beautify;
-  }
-
-  generateCss(styleSheet: { [key: string]: StyleMap } | { [key: string]: StyleMap }[]) {
+  generateCss(styleSheet: { [key: string]: NestedStyleMap } | { [key: string]: NestedStyleMap }[]) {
     let stylesheets = styleSheet instanceof Array ? styleSheet : [styleSheet];
     let generatedCss = '';
 
@@ -21,21 +14,38 @@ export class CssGenerator {
     return generatedCss;
   }
 
-  generateBlock(selector: string, style: StyleMap) {
-    let inside = this.generateBlockContent(style);
-    return `${camelToDash(selector)} {${inside}}`;
+  generateBlock(selector: string, style: NestedStyleMap) {
+    let blocks = this.generateBlockContent(selector, style);
+    return blocks.join('');
   }
 
-  generateBlockContent(style: StyleMap) {
+  generateBlockContent(selector: string, style: NestedStyleMap): string[] {
     let inside = '';
-    
+    let blocks = [];
+
     for (const key in style) {
-      if (style[key]) inside += this.generateStyle(key, style[key] as string);
+      if (isObject(style[key])) {
+        blocks.push(this.generateBlockContent(selector + key, style[key]));
+      } 
+      else if (style[key]) {
+        inside += this.generateStyle(key, style[key] as string);
+      }
     }
 
-    return inside;
+    blocks.unshift(`${selector}{${inside}}`);
+
+    return blocks;
   }
 
+  generateInline(style: StyleMap): string {
+    let inside = '';
+    for (const key in style) {
+      if (style[key]) {
+        inside += this.generateStyle(key, style[key] as string);
+      }
+    }
+    return inside;
+  }
 
   generateStyle(name: string, value: string) {
     return `${camelToDash(name)}:${value};`;

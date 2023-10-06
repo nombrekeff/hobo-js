@@ -70,7 +70,8 @@ export class HtmlGenerator {
   }
 
   private _generateInlineStyle(tag: Tag) {
-    let styleContent = this.cssGenerator.generateBlockContent(tag.attr.style.styles);
+    let styleContent = this.cssGenerator.generateInline(tag.attr.style.styles);
+
     return this._attr('style', styleContent);
   }
 

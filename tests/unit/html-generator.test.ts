@@ -13,7 +13,7 @@ describe('HtmlGenerator', () => {
   it('generateHtml() style tag works', async () => {
     const d1 = builders.style({ '.class': { color: 'red' } });
     const generated = generator.generateHtml(d1);
-    expect(generated).toEqual('<style>.class {color:red;}</style>');
+    expect(generated).toEqual('<style>.class{color:red;}</style>');
   });
 
   it('generateHtml() script tag works', async () => {

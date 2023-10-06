@@ -2,7 +2,7 @@ import { Tag } from './tag';
 export { Tag } from './tag';
 import { HtmlGenerator } from './generation/html-generator';
 import { AttachMode, HoboContext, ValidTagChild } from './custom-types/types';
-import { builders as tagBuilders, TagBuilder } from './tag-builder';
+import { builders as tagBuilders, TagBuilder, PickArgType } from './tag-builder';
 export { TagBuilder } from './tag-builder';
 import { TagName, ValidTagName } from './custom-types/tag-names';
 
@@ -126,10 +126,11 @@ function makeAttachable(builder: TagBuilder): TagBuilder & { a: TagBuilder; atta
   return builder;
 }
 
+
 type BuilderFunctions = {
-  [key in ValidTagName]: ((...children: ValidTagChild[]) => Tag) & TagBuilder & { a: TagBuilder };
+  [key in ValidTagName]: ((...children: PickArgType<key>) => Tag) & TagBuilder & { a: TagBuilder };
 } & {
-  tag: (tagName: TagName, ...children: ValidTagChild[]) => TagBuilder;
+  tag: (tagName: TagName, ...children: PickArgType<typeof tagName>) => TagBuilder;
 };
 
 const exportedTagBuilders: BuilderFunctions = {} as BuilderFunctions;
