@@ -12,11 +12,12 @@
   "scripts": {
     "test": "jest --coverage",
     "clean": "rm -fr dist",
-    "build": "npm run clean && tsc -d --project tsconfig.build.json && npm run bundle:esm && npm run bundle:esm:min && npm run bundle:umd && npm run bundle:umd:min",
+    "build": "npm run clean && tsc -d --project tsconfig.build.json && build:docs && npm run bundle:esm && npm run bundle:esm:min && npm run bundle:umd && npm run bundle:umd:min",
     "bundle:esm": "rollup dist/hobo.js --file dist/hobo.mjs --format esm",
     "bundle:esm:min": "terser --ecma 6 --compress --mangle --module -o dist/hobo.min.mjs -- dist/hobo.mjs && gzip -9 -c dist/hobo.min.mjs > dist/hobo.min.mjs.gz",
     "bundle:umd": "rollup dist/hobo.js --file dist/hobo.umd.js --format umd --name sayHello",
-    "bundle:umd:min": "terser --ecma 6 --compress --mangle -o dist/hobo.umd.min.js -- dist/hobo.umd.js && gzip -9 -c dist/hobo.umd.min.js > dist/hobo.umd.min.js.gz"
+    "bundle:umd:min": "terser --ecma 6 --compress --mangle -o dist/hobo.umd.min.js -- dist/hobo.umd.js && gzip -9 -c dist/hobo.umd.min.js > dist/hobo.umd.min.js.gz",
+    "build:docs": "typedoc --out docs src/*.ts"
   },
   "keywords": [
     "js",
@@ -39,7 +40,6 @@
     "@types/jest": "^29.5.5",
     "@types/node": "^20.7.0",
     "jest": "^29.7.0",
-    "jsdoc-to-markdown": "^8.0.0",
     "rollup": "^3.29.4",
     "terser": "^5.21.0",
     "ts-jest": "^29.1.1",
