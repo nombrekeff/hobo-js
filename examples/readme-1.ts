@@ -16,6 +16,9 @@ myPage.head.append(
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
+      ':hover': {
+        background: 'red'
+      }
     },
   }),
 );

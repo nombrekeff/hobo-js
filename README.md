@@ -98,6 +98,9 @@ The above snippet would output the following html:
         align-items: center;
         justify-content: center;
       }
+      .wrapper:hover {
+        background: red;
+      }
     </style>
   </head>
   <body>
