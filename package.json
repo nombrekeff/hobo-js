@@ -31,6 +31,9 @@
     "in-code"
   ],
   "author": "nombrekeff",
+  "repository": {
+    "git": "https://github.com/nombrekeff/hobo-js"
+  },
   "license": "ISC",
   "devDependencies": {
     "@types/jest": "^29.5.5",

@@ -19,6 +19,8 @@ It even handles self closing tags (void elements) for you. So when creating a **
 
 Additionally it's almost fully typed, not only the surface, but into most css property values! IDEs will help autocomplete a lot of stuff! And is extensively tested.
 
+> NOTE: If you want a similar API but for creating apps at Runtime, take a look at my other project [Cardboard](https://github.com/nombrekeff/cardboard).
+
 ### Getting Started
 Install package: 
 
