@@ -61,6 +61,9 @@ myPage.head.append(
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
+      ':hover': {
+        background: 'red'
+      }
     },
   }, {/* more style objects */}),
 );
@@ -130,6 +133,9 @@ myPage.head.append(
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
+      ':hover': {
+        background: 'red'
+      }
     },
   }, {
     'div': {...}
@@ -137,7 +143,24 @@ myPage.head.append(
 );
 ```
 
-The following adds a style tag to the `head` tag. The style tag accepts objects with css definitions. It's typed, so intelisense will work.
+The above code adds a style tag to the `head` tag. The style tag accepts objects with css definitions. It's typed, so intelisense will work.
+You can pass any number of style objects. And you can also nest like in SCSS.
+
+For example, this:
+```ts
+'.wrapper': {
+  background: 'blue'
+  ':hover': {
+    background: 'red'
+  }
+}
+```
+
+Will generate: 
+```css
+.wrapper { background: 'blue' }
+.wrapper:hover { background: 'red' }
+```
 
 > Note that in this case we use `.append` as the head is not attached.
 
