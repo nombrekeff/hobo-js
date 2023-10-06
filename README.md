@@ -24,6 +24,7 @@ Install package:
 
 ```
 npm install https://github.com/nombrekeff/hobo-js
+npm install hobo-js
 ```
 
 Then you  can import the package. 
