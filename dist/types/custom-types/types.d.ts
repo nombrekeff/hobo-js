@@ -5,6 +5,12 @@ import { PickPropertyValues } from './css-property-values';
 export type StyleMap = {
     [key in CssProperty]?: PickPropertyValues<key>;
 };
+export type NestedStyleMap = {
+    [key in CssProperty]?: PickPropertyValues<key> | StyleMap;
+};
+export type StyleSet = {
+    [key: string]: NestedStyleMap;
+};
 export declare enum AttachMode {
     none = 0,
     body = 1,

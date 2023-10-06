@@ -1,6 +1,6 @@
 {
   "name": "hobo-js",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A little utility to generate html inside your js/ts code",
   "main": "dist/hobo.js",
   "module": "dist/hobo.mjs",

@@ -1,7 +1,7 @@
 import { Tag } from './tag';
 export { Tag } from './tag';
-import { AttachMode, HoboContext, ValidTagChild } from './custom-types/types';
-import { TagBuilder } from './tag-builder';
+import { AttachMode, HoboContext } from './custom-types/types';
+import { TagBuilder, PickArgType } from './tag-builder';
 export { TagBuilder } from './tag-builder';
 import { TagName, ValidTagName } from './custom-types/tag-names';
 export declare let _context: HoboContext;
@@ -65,11 +65,11 @@ export declare function attach(tag: Tag): void;
  */
 export declare function detach(): void;
 type BuilderFunctions = {
-    [key in ValidTagName]: ((...children: ValidTagChild[]) => Tag) & TagBuilder & {
+    [key in ValidTagName]: ((...children: PickArgType<key>) => Tag) & TagBuilder & {
         a: TagBuilder;
     };
 } & {
-    tag: (tagName: TagName, ...children: ValidTagChild[]) => TagBuilder;
+    tag: (tagName: TagName, ...children: PickArgType<typeof tagName>) => TagBuilder;
 };
 /** Converts's the Tag tree into a html string */
 export declare function generate(root: Tag): string;

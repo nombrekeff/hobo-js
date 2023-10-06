@@ -1,8 +1,5 @@
-import { camelToDash } from '../util';
+import { camelToDash, isObject } from '../util';
 export class CssGenerator {
-    constructor(beautify = true) {
-        this.beautify = beautify;
-    }
     generateCss(styleSheet) {
         let stylesheets = styleSheet instanceof Array ? styleSheet : [styleSheet];
         let generatedCss = '';
@@ -14,14 +11,29 @@ export class CssGenerator {
         return generatedCss;
     }
     generateBlock(selector, style) {
-        let inside = this.generateBlockContent(style);
-        return `${camelToDash(selector)} {${inside}}`;
+        let blocks = this.generateBlockContent(selector, style);
+        return blocks.join('');
     }
-    generateBlockContent(style) {
+    generateBlockContent(selector, style) {
+        let inside = '';
+        let blocks = [];
+        for (const key in style) {
+            if (isObject(style[key])) {
+                blocks.push(this.generateBlockContent(selector + key, style[key]));
+            }
+            else if (style[key]) {
+                inside += this.generateStyle(key, style[key]);
+            }
+        }
+        blocks.unshift(`${selector}{${inside}}`);
+        return blocks;
+    }
+    generateInline(style) {
         let inside = '';
         for (const key in style) {
-            if (style[key])
+            if (style[key]) {
                 inside += this.generateStyle(key, style[key]);
+            }
         }
         return inside;
     }

@@ -669,11 +669,11 @@
         return fnStr.trim();
     }
     const camelToDash = (str) => str.replace(/([A-Z])/g, (val) => `-${val.toLowerCase()}`);
+    function isObject(obj) {
+        return typeof obj === 'object' && !(obj instanceof Array);
+    }
 
     class CssGenerator {
-        constructor(beautify = true) {
-            this.beautify = beautify;
-        }
         generateCss(styleSheet) {
             let stylesheets = styleSheet instanceof Array ? styleSheet : [styleSheet];
             let generatedCss = '';
@@ -685,14 +685,29 @@
             return generatedCss;
         }
         generateBlock(selector, style) {
-            let inside = this.generateBlockContent(style);
-            return `${camelToDash(selector)} {${inside}}`;
+            let blocks = this.generateBlockContent(selector, style);
+            return blocks.join('');
         }
-        generateBlockContent(style) {
+        generateBlockContent(selector, style) {
+            let inside = '';
+            let blocks = [];
+            for (const key in style) {
+                if (isObject(style[key])) {
+                    blocks.push(this.generateBlockContent(selector + key, style[key]));
+                }
+                else if (style[key]) {
+                    inside += this.generateStyle(key, style[key]);
+                }
+            }
+            blocks.unshift(`${selector}{${inside}}`);
+            return blocks;
+        }
+        generateInline(style) {
             let inside = '';
             for (const key in style) {
-                if (style[key])
+                if (style[key]) {
                     inside += this.generateStyle(key, style[key]);
+                }
             }
             return inside;
         }
@@ -754,7 +769,7 @@
             return attributesString;
         }
         _generateInlineStyle(tag) {
-            let styleContent = this.cssGenerator.generateBlockContent(tag.attr.style.styles);
+            let styleContent = this.cssGenerator.generateInline(tag.attr.style.styles);
             return this._attr('style', styleContent);
         }
         _generateScriptContent(storage) {

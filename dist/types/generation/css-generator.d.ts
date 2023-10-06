@@ -1,13 +1,12 @@
-import { StyleMap } from '../custom-types/types';
+import { NestedStyleMap, StyleMap } from '../custom-types/types';
 export declare class CssGenerator {
-    beautify: boolean;
-    constructor(beautify?: boolean);
     generateCss(styleSheet: {
-        [key: string]: StyleMap;
+        [key: string]: NestedStyleMap;
     } | {
-        [key: string]: StyleMap;
+        [key: string]: NestedStyleMap;
     }[]): string;
-    generateBlock(selector: string, style: StyleMap): string;
-    generateBlockContent(style: StyleMap): string;
+    generateBlock(selector: string, style: NestedStyleMap): string;
+    generateBlockContent(selector: string, style: NestedStyleMap): string[];
+    generateInline(style: StyleMap): string;
     generateStyle(name: string, value: string): string;
 }

@@ -55,7 +55,7 @@ export class HtmlGenerator {
         return attributesString;
     }
     _generateInlineStyle(tag) {
-        let styleContent = this.cssGenerator.generateBlockContent(tag.attr.style.styles);
+        let styleContent = this.cssGenerator.generateInline(tag.attr.style.styles);
         return this._attr('style', styleContent);
     }
     _generateScriptContent(storage) {

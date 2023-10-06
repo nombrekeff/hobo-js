@@ -4,3 +4,4 @@ export declare const replaceDoubleQuotes: (str: string) => string;
 export declare const generateId: () => string;
 export declare const camelToDash: (str: any) => any;
 export declare const dashToCamel: (str: any) => any;
+export declare function isObject(obj: any): boolean;
