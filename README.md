@@ -37,7 +37,7 @@ import { builders, generate } from 'hobo-js';
 const { builders, generate } = require('hobo-js')
 ```
 
-I recomend destructuring builders, for a cleaner code:
+I recommend destructuring builders, for cleaner code:
 
 ```ts
 const { div, p, span, b, script, button, style, a, hr } = builders;
@@ -47,7 +47,7 @@ const { div, p, span, b, script, button, style, a, hr } = builders;
 
 Check out the [`examples`](/examples) folder for a variety of examples on how to use hobo.
 
-You can check the an interactive demo [here](https://nombrekeff.github.io/hobo-interactive-demo/)
+You can check the interactive demo [here](https://nombrekeff.github.io/hobo-interactive-demo/)
 
 ### Docs
 You can find docs [here](https://nombrekeff.github.io/hobo-js/)
@@ -119,7 +119,7 @@ The above snippet would output the following html:
 </html>
 ```
 
-#### Demo exlanation
+#### Demo explanation
 
 ```ts
 const myPage = doc('My Page Title');
@@ -129,7 +129,7 @@ First of all we create an HTML Page, by calling `doc()`. This will create an HTM
 
 > It's not required to create a doc, you can start the document with any tag you want.
 > It also "attaches" the `body` tag to the hobo context. This means that you can then automatically add tags to the attached tag without having to use `.append`. I will explain further down.
-> * `doc(mode)`, doc can receive a argument to change the Attach behaviour. You can specify if you want to attach to the body, head or html tags. It will attach to the body by default
+> * `doc(mode)`, the doc can receive an argument to change the Attach behaviour. You can specify if you want to attach to the body, head or HTML tags. It will attach to the body by default
 
 ----
 
@@ -184,12 +184,12 @@ div.a.ac('wrapper').build(
 );
 ```
 
-In the step above step, we create the html that will be inside the `body`. As you can see instead of calling `.append` in the body tag like with the style.
+In the step above step, we create the HTML that will be inside the `body`. As you can see instead of calling `.append` in the body tag like with the style.
 `.a` and `.attach` are used to [attach](#attaching) to the current hobo context's attached tag (_which will be the body tag in the example_)
 
 Then we set the tag's class name by calling `.ac` (you can also use `.addClass()`), this will set the class wrapper to the div (`<div class="wrapper"></div>`)
 
-After that we build the tag by calling `.b` (or `.build()`, or you can also just call the builder `div()`), and pass in a list of children.
+After that, we build the tag by calling `.b` (or `.build()`, or you can also call the builder `div()`), and pass in a list of children.
 
 Hobo uses the builder pattern to ease the creation of tags. A tag can be built by, either calling the builder directly:
 ```ts
@@ -208,9 +208,9 @@ b.build('And so am I'),
 > )
 > ```
 
-> **NOTE** each time you modify the builder it returns a new TagBuilder instance. 
-> So you can't assign it and then modify, you need to chain. 
-> This is done so hobo can generate new tag builders for each tag without needing to be a function.
+> **NOTE** Each time you modify the builder it returns a new TagBuilder instance. 
+> So you can't assign it and then modify it, you need to chain. 
+> This is done so Hobo can generate new tag builders for each tag without needing to be a function.
 > 
 > This does not work:
 > ```ts 
@@ -239,7 +239,7 @@ p.as('color', 'aliceblue');
 p.setStyle({ 'color': 'aliceblue' });
 p.ss({ 'color': 'aliceblue' });
 ```
-Tags can also have inline styles. You can add a single style by using the add style (`.as`) method, or add multiple at once by using the set styles (`.ss`) method.
+Tags can also have inline styles. You can add a single style using the add style (`.as`) method, or add multiple at once using the set styles (`.ss`) method.
 
 ----
 
@@ -252,7 +252,7 @@ script.a(() => {
 ```
 
 Creates a `script` tag. Anything inside the function will be inserted into the generated script.  
-The script acceptes a list of functions. You will also have complete typing for dom.
+The script accepts a list of functions. You will also have complete typing for dom.
 
 ----
 
@@ -260,10 +260,10 @@ The script acceptes a list of functions. You will also have complete typing for 
 console.log(generate(myPage.doc));
 ```
 
-Finally generate the html. `generate` returns a string. It's up to you to handle it from here. 
+Finally, generate the html. `generate` returns a string. It's up to you to handle it from here. 
 
 > NOTE that generate must receive the root tag you want to generate. 
-> In this example wi pass in `myPage.doc` do we generate the whole page.
+> In this example we pass in `myPage.doc` to generate the whole page.
 >
 > But you can generate any tag you want:
 > ```ts
